@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.3.32929.385
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RasterFramework", "RasterFramework\RasterFramework.csproj", "{F092B288-C86B-40ED-A63D-9C5C09A79C6F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F092B288-C86B-40ED-A63D-9C5C09A79C6F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F092B288-C86B-40ED-A63D-9C5C09A79C6F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F092B288-C86B-40ED-A63D-9C5C09A79C6F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F092B288-C86B-40ED-A63D-9C5C09A79C6F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {27D4E806-3453-4C24-B8C9-8F2475E602B9}
+	EndGlobalSection
+EndGlobal
