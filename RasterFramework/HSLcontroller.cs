@@ -25,6 +25,17 @@ namespace RasterFramework
             ligBar.Value = 0;
         }
 
+        public void ResetValues()
+        {
+            hueBar.Value = 0;
+            satBar.Value = 0;
+            ligBar.Value = 0;
+
+            txtHueValue.Text = "0°";
+            txtLigValue.Text = "0";
+            txtSatValue.Text = "0";
+        }
+
         private void hueBar_Scroll(object sender, EventArgs e)
         {
             if(hueBar.Value == 0) txtHueValue.Text = hueBar.Value.ToString() + "°";

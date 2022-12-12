@@ -35,10 +35,11 @@
             // flPanel
             // 
             this.flPanel.AutoScroll = true;
-            this.flPanel.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.flPanel.Location = new System.Drawing.Point(0, 58);
+            this.flPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.flPanel.Location = new System.Drawing.Point(0, 0);
             this.flPanel.Name = "flPanel";
-            this.flPanel.Size = new System.Drawing.Size(634, 503);
+            this.flPanel.Padding = new System.Windows.Forms.Padding(0, 64, 0, 0);
+            this.flPanel.Size = new System.Drawing.Size(634, 721);
             this.flPanel.TabIndex = 0;
             // 
             // btnAddModul
@@ -57,10 +58,10 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(634, 561);
+            this.ClientSize = new System.Drawing.Size(634, 721);
             this.Controls.Add(this.btnAddModul);
             this.Controls.Add(this.flPanel);
-            this.MinimumSize = new System.Drawing.Size(600, 600);
+            this.MinimumSize = new System.Drawing.Size(600, 760);
             this.Name = "Form1";
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.Form1_Load);

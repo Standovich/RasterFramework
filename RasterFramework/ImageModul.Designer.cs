@@ -36,22 +36,26 @@
             this.txtConvUI = new System.Windows.Forms.Label();
             this.convolutionBox = new System.Windows.Forms.ComboBox();
             this.checkGray = new System.Windows.Forms.CheckBox();
-            this.checkConv = new System.Windows.Forms.CheckBox();
             this.checkNegative = new System.Windows.Forms.CheckBox();
             this.txtThresholdUI = new System.Windows.Forms.Label();
             this.numThreshold = new System.Windows.Forms.NumericUpDown();
             this.btnRemove = new System.Windows.Forms.Button();
             this.rgBcontroller1 = new RasterFramework.RGBcontroller();
             this.hsLcontroller1 = new RasterFramework.HSLcontroller();
+            this.numZoom = new System.Windows.Forms.NumericUpDown();
+            this.lblZoomUI = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.imageBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numThreshold)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numZoom)).BeginInit();
             this.SuspendLayout();
             // 
             // imageBox
             // 
+            this.imageBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.imageBox.Location = new System.Drawing.Point(3, 53);
             this.imageBox.Name = "imageBox";
-            this.imageBox.Size = new System.Drawing.Size(300, 300);
+            this.imageBox.Size = new System.Drawing.Size(350, 350);
+            this.imageBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
             this.imageBox.TabIndex = 0;
             this.imageBox.TabStop = false;
             // 
@@ -84,7 +88,7 @@
             this.grayScaleBox.Items.AddRange(new object[] {
             "Average",
             "Weighted"});
-            this.grayScaleBox.Location = new System.Drawing.Point(3, 377);
+            this.grayScaleBox.Location = new System.Drawing.Point(3, 449);
             this.grayScaleBox.Name = "grayScaleBox";
             this.grayScaleBox.Size = new System.Drawing.Size(105, 23);
             this.grayScaleBox.TabIndex = 3;
@@ -93,7 +97,7 @@
             // txtGrayUI
             // 
             this.txtGrayUI.AutoSize = true;
-            this.txtGrayUI.Location = new System.Drawing.Point(3, 359);
+            this.txtGrayUI.Location = new System.Drawing.Point(3, 431);
             this.txtGrayUI.Name = "txtGrayUI";
             this.txtGrayUI.Size = new System.Drawing.Size(105, 15);
             this.txtGrayUI.TabIndex = 4;
@@ -102,7 +106,7 @@
             // txtConvUI
             // 
             this.txtConvUI.AutoSize = true;
-            this.txtConvUI.Location = new System.Drawing.Point(132, 359);
+            this.txtConvUI.Location = new System.Drawing.Point(190, 410);
             this.txtConvUI.Name = "txtConvUI";
             this.txtConvUI.Size = new System.Drawing.Size(121, 15);
             this.txtConvUI.TabIndex = 5;
@@ -112,10 +116,11 @@
             // 
             this.convolutionBox.FormattingEnabled = true;
             this.convolutionBox.Items.AddRange(new object[] {
+            "Vlastní",
             "Gaussian blur",
             "Box blur",
             "Sharpen"});
-            this.convolutionBox.Location = new System.Drawing.Point(132, 377);
+            this.convolutionBox.Location = new System.Drawing.Point(190, 428);
             this.convolutionBox.Name = "convolutionBox";
             this.convolutionBox.Size = new System.Drawing.Size(121, 23);
             this.convolutionBox.TabIndex = 6;
@@ -124,7 +129,7 @@
             // checkGray
             // 
             this.checkGray.AutoSize = true;
-            this.checkGray.Location = new System.Drawing.Point(142, 8);
+            this.checkGray.Location = new System.Drawing.Point(3, 409);
             this.checkGray.Name = "checkGray";
             this.checkGray.Size = new System.Drawing.Size(76, 19);
             this.checkGray.TabIndex = 7;
@@ -132,21 +137,10 @@
             this.checkGray.UseVisualStyleBackColor = true;
             this.checkGray.CheckedChanged += new System.EventHandler(this.checkGray_CheckedChanged);
             // 
-            // checkConv
-            // 
-            this.checkConv.AutoSize = true;
-            this.checkConv.Location = new System.Drawing.Point(142, 30);
-            this.checkConv.Name = "checkConv";
-            this.checkConv.Size = new System.Drawing.Size(92, 19);
-            this.checkConv.TabIndex = 8;
-            this.checkConv.Text = "Convolution";
-            this.checkConv.UseVisualStyleBackColor = true;
-            this.checkConv.CheckedChanged += new System.EventHandler(this.checkConv_CheckedChanged);
-            // 
             // checkNegative
             // 
             this.checkNegative.AutoSize = true;
-            this.checkNegative.Location = new System.Drawing.Point(224, 8);
+            this.checkNegative.Location = new System.Drawing.Point(85, 409);
             this.checkNegative.Name = "checkNegative";
             this.checkNegative.Size = new System.Drawing.Size(73, 19);
             this.checkNegative.TabIndex = 9;
@@ -157,7 +151,7 @@
             // txtThresholdUI
             // 
             this.txtThresholdUI.AutoSize = true;
-            this.txtThresholdUI.Location = new System.Drawing.Point(3, 416);
+            this.txtThresholdUI.Location = new System.Drawing.Point(190, 461);
             this.txtThresholdUI.Name = "txtThresholdUI";
             this.txtThresholdUI.Size = new System.Drawing.Size(129, 15);
             this.txtThresholdUI.TabIndex = 10;
@@ -165,7 +159,7 @@
             // 
             // numThreshold
             // 
-            this.numThreshold.Location = new System.Drawing.Point(132, 414);
+            this.numThreshold.Location = new System.Drawing.Point(323, 459);
             this.numThreshold.Maximum = new decimal(new int[] {
             50,
             0,
@@ -179,7 +173,7 @@
             // btnRemove
             // 
             this.btnRemove.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.btnRemove.Location = new System.Drawing.Point(438, 416);
+            this.btnRemove.Location = new System.Drawing.Point(528, 3);
             this.btnRemove.Name = "btnRemove";
             this.btnRemove.Size = new System.Drawing.Size(23, 23);
             this.btnRemove.TabIndex = 14;
@@ -189,30 +183,63 @@
             // 
             // rgBcontroller1
             // 
-            this.rgBcontroller1.Location = new System.Drawing.Point(309, 39);
+            this.rgBcontroller1.Location = new System.Drawing.Point(359, 238);
             this.rgBcontroller1.Name = "rgBcontroller1";
             this.rgBcontroller1.Size = new System.Drawing.Size(155, 165);
             this.rgBcontroller1.TabIndex = 15;
             // 
             // hsLcontroller1
             // 
-            this.hsLcontroller1.Location = new System.Drawing.Point(309, 222);
+            this.hsLcontroller1.Location = new System.Drawing.Point(359, 53);
             this.hsLcontroller1.Name = "hsLcontroller1";
             this.hsLcontroller1.Size = new System.Drawing.Size(155, 165);
             this.hsLcontroller1.TabIndex = 16;
+            // 
+            // numZoom
+            // 
+            this.numZoom.Location = new System.Drawing.Point(237, 25);
+            this.numZoom.Maximum = new decimal(new int[] {
+            200,
+            0,
+            0,
+            0});
+            this.numZoom.Minimum = new decimal(new int[] {
+            100,
+            0,
+            0,
+            0});
+            this.numZoom.Name = "numZoom";
+            this.numZoom.Size = new System.Drawing.Size(49, 23);
+            this.numZoom.TabIndex = 17;
+            this.numZoom.Value = new decimal(new int[] {
+            100,
+            0,
+            0,
+            0});
+            this.numZoom.ValueChanged += new System.EventHandler(this.numZoom_ValueChanged);
+            // 
+            // lblZoomUI
+            // 
+            this.lblZoomUI.AutoSize = true;
+            this.lblZoomUI.Location = new System.Drawing.Point(174, 27);
+            this.lblZoomUI.Name = "lblZoomUI";
+            this.lblZoomUI.Size = new System.Drawing.Size(60, 15);
+            this.lblZoomUI.TabIndex = 18;
+            this.lblZoomUI.Text = "Zoom (%)";
             // 
             // ImageModul
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.Controls.Add(this.lblZoomUI);
+            this.Controls.Add(this.numZoom);
             this.Controls.Add(this.hsLcontroller1);
             this.Controls.Add(this.rgBcontroller1);
             this.Controls.Add(this.btnRemove);
             this.Controls.Add(this.numThreshold);
             this.Controls.Add(this.txtThresholdUI);
             this.Controls.Add(this.checkNegative);
-            this.Controls.Add(this.checkConv);
             this.Controls.Add(this.checkGray);
             this.Controls.Add(this.convolutionBox);
             this.Controls.Add(this.txtConvUI);
@@ -222,10 +249,11 @@
             this.Controls.Add(this.txtPictureUI);
             this.Controls.Add(this.imageBox);
             this.Name = "ImageModul";
-            this.Size = new System.Drawing.Size(470, 449);
+            this.Size = new System.Drawing.Size(554, 570);
             this.Load += new System.EventHandler(this.ImageModul_Load);
             ((System.ComponentModel.ISupportInitialize)(this.imageBox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numThreshold)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numZoom)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -241,12 +269,13 @@
         private Label txtConvUI;
         private ComboBox convolutionBox;
         private CheckBox checkGray;
-        private CheckBox checkConv;
         private CheckBox checkNegative;
         private Label txtThresholdUI;
         private NumericUpDown numThreshold;
         private Button btnRemove;
         private RGBcontroller rgBcontroller1;
         private HSLcontroller hsLcontroller1;
+        private NumericUpDown numZoom;
+        private Label lblZoomUI;
     }
 }

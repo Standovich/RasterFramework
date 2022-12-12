@@ -44,7 +44,7 @@
             // 
             // txtLigValue
             // 
-            this.txtLigValue.Location = new System.Drawing.Point(113, 104);
+            this.txtLigValue.Location = new System.Drawing.Point(113, 107);
             this.txtLigValue.Name = "txtLigValue";
             this.txtLigValue.Size = new System.Drawing.Size(38, 15);
             this.txtLigValue.TabIndex = 17;
@@ -53,7 +53,7 @@
             // 
             // txtSatValue
             // 
-            this.txtSatValue.Location = new System.Drawing.Point(113, 51);
+            this.txtSatValue.Location = new System.Drawing.Point(113, 54);
             this.txtSatValue.Name = "txtSatValue";
             this.txtSatValue.Size = new System.Drawing.Size(38, 15);
             this.txtSatValue.TabIndex = 16;
@@ -62,7 +62,7 @@
             // 
             // txtHueValue
             // 
-            this.txtHueValue.Location = new System.Drawing.Point(96, 0);
+            this.txtHueValue.Location = new System.Drawing.Point(96, 3);
             this.txtHueValue.Name = "txtHueValue";
             this.txtHueValue.Size = new System.Drawing.Size(55, 15);
             this.txtHueValue.TabIndex = 15;
@@ -71,7 +71,7 @@
             // 
             // ligBar
             // 
-            this.ligBar.Location = new System.Drawing.Point(3, 122);
+            this.ligBar.Location = new System.Drawing.Point(3, 125);
             this.ligBar.Maximum = 50;
             this.ligBar.Minimum = -50;
             this.ligBar.Name = "ligBar";
@@ -83,15 +83,15 @@
             // txtLightness
             // 
             this.txtLightness.AutoSize = true;
-            this.txtLightness.Location = new System.Drawing.Point(3, 104);
+            this.txtLightness.Location = new System.Drawing.Point(3, 107);
             this.txtLightness.Name = "txtLightness";
-            this.txtLightness.Size = new System.Drawing.Size(57, 15);
+            this.txtLightness.Size = new System.Drawing.Size(60, 15);
             this.txtLightness.TabIndex = 13;
-            this.txtLightness.Text = "Lightness";
+            this.txtLightness.Text = "Lightness:";
             // 
             // satBar
             // 
-            this.satBar.Location = new System.Drawing.Point(3, 69);
+            this.satBar.Location = new System.Drawing.Point(3, 72);
             this.satBar.Maximum = 50;
             this.satBar.Minimum = -50;
             this.satBar.Name = "satBar";
@@ -103,7 +103,7 @@
             // txtSaturation
             // 
             this.txtSaturation.AutoSize = true;
-            this.txtSaturation.Location = new System.Drawing.Point(3, 51);
+            this.txtSaturation.Location = new System.Drawing.Point(3, 54);
             this.txtSaturation.Name = "txtSaturation";
             this.txtSaturation.Size = new System.Drawing.Size(64, 15);
             this.txtSaturation.TabIndex = 11;
@@ -111,7 +111,7 @@
             // 
             // hueBar
             // 
-            this.hueBar.Location = new System.Drawing.Point(3, 18);
+            this.hueBar.Location = new System.Drawing.Point(3, 21);
             this.hueBar.Maximum = 180;
             this.hueBar.Minimum = -180;
             this.hueBar.Name = "hueBar";
@@ -123,7 +123,7 @@
             // txtHue
             // 
             this.txtHue.AutoSize = true;
-            this.txtHue.Location = new System.Drawing.Point(3, 0);
+            this.txtHue.Location = new System.Drawing.Point(3, 3);
             this.txtHue.Name = "txtHue";
             this.txtHue.Size = new System.Drawing.Size(32, 15);
             this.txtHue.TabIndex = 9;

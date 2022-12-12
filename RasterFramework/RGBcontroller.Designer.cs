@@ -85,9 +85,9 @@
             this.txtBlue.AutoSize = true;
             this.txtBlue.Location = new System.Drawing.Point(3, 107);
             this.txtBlue.Name = "txtBlue";
-            this.txtBlue.Size = new System.Drawing.Size(75, 15);
+            this.txtBlue.Size = new System.Drawing.Size(78, 15);
             this.txtBlue.TabIndex = 4;
-            this.txtBlue.Text = "Blue channel";
+            this.txtBlue.Text = "Blue channel:";
             // 
             // blueBar
             // 

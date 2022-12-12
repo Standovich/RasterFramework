@@ -24,6 +24,17 @@ namespace RasterFramework
             blueBar.Value = 100;
         }
 
+        public void ResetValues()
+        {
+            redBar.Value = 100;
+            greenBar.Value = 100;
+            blueBar.Value = 100;
+
+            txtRedValue.Text = "100 %";
+            txtGreenValue.Text = "100 %";
+            txtBlueValue.Text = "100 %";
+        }
+
         private void redBar_Scroll(object sender, EventArgs e)
         {
             txtRedValue.Text = redBar.Value.ToString() + " %";

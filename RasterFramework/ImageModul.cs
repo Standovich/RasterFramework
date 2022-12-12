@@ -16,10 +16,26 @@ namespace RasterFramework
     {
         private ImageBitmap? SourceImage;
         private ImageBitmap? GrayImage;
+        private ImageBitmap? EditedImage;
+        private List<ConvMethod> ConvMethods;
+        private List<string> ConvMethodNames;
 
         private bool GrayEnabled = false;
         private bool ConvEnabled = false;
         private bool NegaEnabled = false;
+        private bool Zoomed = false;
+
+        private double scale;
+        private double width;
+        private double height;
+
+        private int r = 100;
+        private int g = 100;
+        private int b = 100;
+
+        private int h = 0;
+        private float s = 0;
+        private float l = 0;
 
         public ImageModul()
         {
@@ -29,22 +45,45 @@ namespace RasterFramework
         private void ImageModul_Load(object sender, EventArgs e)
         {
             grayScaleBox.SelectedIndex = 0;
-            convolutionBox.SelectedIndex = 0;
+            convolutionBox.SelectedIndex = 1;
             numThreshold.Value = 10;
+            ConvMethods = new List<ConvMethod>();
+            ConvMethodNames = new List<string>();
+
+            ConvMethods.Add(new("Box blur (3x3)", new int[,] { 
+                { 1, 1, 1 }, { 1, 1, 1 }, { 1, 1, 1 } 
+            }, true));
+            ConvMethods.Add(new("Box blur (5x5)", new int[,] { 
+                { 1, 1, 1, 1, 1 }, { 1, 1, 1, 1, 1 }, { 1, 1, 1, 1, 1 }, 
+                { 1, 1, 1, 1, 1 }, { 1, 1, 1, 1, 1 } 
+            }, true));
+            ConvMethods.Add(new("Gaussian blur (3x3)", new int[,] { 
+                { 1, 2, 1 }, { 2, 4, 2 }, { 1, 2, 1 } 
+            }, true));
+            ConvMethods.Add(new("Gaussian blur (5x5)", new int[,] {
+                { 1, 4, 6, 4, 1 }, { 4, 16, 24, 16, 4 }, { 6, 24, 36, 24, 6 },
+                { 4, 16, 24, 16, 4 }, { 1, 4, 6, 4, 1 }
+            }, true));
+            ConvMethods.Add(new("Sharpen (3x3)", new int[,] { 
+                { 0, -1, 0 }, { -1, 5, -1 }, { 0, -1, 0 } 
+            }, false));
+
+            UpdateConvMethods();
         }
 
         private void imgSelectBox_SelectedIndexChanged(object sender, EventArgs e)
         {
+            Bitmap newImage = new(1,1);
             switch (imgSelectBox.SelectedIndex)
             {
                 case 0:
-                    SourceImage = ResizeImg(new Bitmap(@"..\..\..\Images\1.png"));
+                    newImage = new Bitmap(@"..\..\..\Images\1.png");
                     break;
                 case 1:
-                    SourceImage = ResizeImg(new Bitmap(@"..\..\..\Images\2.png"));
+                    newImage = new Bitmap(@"..\..\..\Images\2.png");
                     break;
                 case 2:
-                    SourceImage = ResizeImg(new Bitmap(@"..\..\..\Images\3.png"));
+                    newImage = new Bitmap(@"..\..\..\Images\3.png");
                     break;
                 case 3:
                     OpenFileDialog frmOpenImg = new OpenFileDialog()
@@ -54,18 +93,21 @@ namespace RasterFramework
                     var open = frmOpenImg.ShowDialog();
                     if (open == DialogResult.OK)
                     {
-                        SourceImage = ResizeImg(new Bitmap(Image.FromFile(frmOpenImg.FileName)));
+                        newImage = new Bitmap(Image.FromFile(frmOpenImg.FileName));
                     }
                     break;
             }
+            SourceImage = ResizeImg(newImage);
+            EditedImage = new(SourceImage);
+
             ResetModul();
-            imageBox.Image = SourceImage.GetImage();
+            imageBox.Image = EditedImage.GetImage();
         }
 
         private ImageBitmap ResizeImg(Bitmap img)
         {
-            double ratioX = imageBox.Width / img.Width;
-            double ratioY = imageBox.Height / img.Height;
+            double ratioX = (double)imageBox.Width / (double)img.Width;
+            double ratioY = (double)imageBox.Height / (double)img.Height;
             double ratio = Math.Min(ratioX, ratioY);
 
             int newWidth = (int)(img.Width * ratio);
@@ -75,6 +117,19 @@ namespace RasterFramework
             return new ImageBitmap(resizedImg);
         }
 
+        private void UpdateConvMethods()
+        {
+            convolutionBox.DataSource = null;
+            ConvMethodNames.Clear();
+            ConvMethodNames.Add("Žádné");
+            foreach (ConvMethod item in ConvMethods)
+            {
+                ConvMethodNames.Add(item.Name);
+            }
+            ConvMethodNames.Add("Upravit metody");
+            convolutionBox.DataSource = ConvMethodNames;
+        }
+
         private void ResetModul()
         {
             GrayEnabled = false;
@@ -82,27 +137,35 @@ namespace RasterFramework
             NegaEnabled = false;
             GrayImage = null;
             checkGray.Checked = false;
-            checkConv.Checked = false;
             checkNegative.Checked = false;
+            numZoom.Value = 100;
+            hsLcontroller1.ResetValues();
+            rgBcontroller1.ResetValues();
         }
 
         private void ProcessingCheck()
         {
             if(SourceImage != null)
             {
+                if (Zoomed) ZoomImg();
+                else EditedImage = new(SourceImage);
+
+                EditedImage = ColorController.ChangeRGB(r, g, b, EditedImage);
+                EditedImage = ColorController.ChangeHSL(h, s, l, EditedImage);
+
                 if (GrayEnabled)
                 {
+                    GrayImage = GrayscaleConvertor.ApplyGrayScale(
+                            grayScaleBox.SelectedIndex, EditedImage);
+
                     if (NegaEnabled)
                     {
-                        if (GrayImage == null)
-                            GrayImage = GrayscaleConvertor.ApplyGrayScale(
-                            grayScaleBox.SelectedIndex, SourceImage);
-
                         if (ConvEnabled)
                         {
                             ImageBitmap newImage = Convolution.ChooseConvolution(
                                 false, Convert.ToInt32(numThreshold.Value),
-                                convolutionBox.SelectedIndex, GrayImage);
+                                ConvMethods[convolutionBox.SelectedIndex - 1],
+                                GrayImage);
                             imageBox.Image = NegativeConvertor.ConvertToNegative(newImage).GetImage();
                         }
                         else
@@ -113,15 +176,12 @@ namespace RasterFramework
                     }
                     else
                     {
-                        if (GrayImage == null)
-                            GrayImage = GrayscaleConvertor.ApplyGrayScale(
-                            grayScaleBox.SelectedIndex, SourceImage);
-
                         if (ConvEnabled)
                         {
                             ImageBitmap newImage = Convolution.ChooseConvolution(
                                 false, Convert.ToInt32(numThreshold.Value),
-                                convolutionBox.SelectedIndex, GrayImage);
+                                ConvMethods[convolutionBox.SelectedIndex - 1], 
+                                GrayImage);
                             imageBox.Image = newImage.GetImage();
                         }
                         else
@@ -138,13 +198,13 @@ namespace RasterFramework
                         {
                             ImageBitmap newImage = Convolution.ChooseConvolution(
                                 false, Convert.ToInt32(numThreshold.Value),
-                                convolutionBox.SelectedIndex, SourceImage);
-                            //newImage = NegativeConvertor.ConvertToNegative(new(newImage.GetCopy()));
+                                ConvMethods[convolutionBox.SelectedIndex - 1],
+                                EditedImage);
                             imageBox.Image = NegativeConvertor.ConvertToNegative(newImage).GetImage();
                         }
                         else
                         {
-                            imageBox.Image = NegativeConvertor.ConvertToNegative(SourceImage).GetImage();
+                            imageBox.Image = NegativeConvertor.ConvertToNegative(EditedImage).GetImage();
                         }
 
                     }
@@ -154,26 +214,42 @@ namespace RasterFramework
                         {
                             imageBox.Image = Convolution.ChooseConvolution(
                                 false, Convert.ToInt32(numThreshold.Value),
-                                convolutionBox.SelectedIndex, SourceImage).GetImage();
+                                ConvMethods[convolutionBox.SelectedIndex - 1],
+                                EditedImage).GetImage();
                         }
                         else
                         {
-                            imageBox.Image = SourceImage.GetImage();
+                            imageBox.Image = EditedImage.GetImage();
                         }
                     }
                 }
             }
         }
 
+        private void ZoomImg()
+        {
+            EditedImage = new(new Bitmap(SourceImage.GetImage(), (int)width, (int)height));
+        }
+
         public void ChangeRGB(int r, int g, int b)
         {
-            if(SourceImage != null)
-                imageBox.Image = ColorController.ChangeRGB(r, g, b, SourceImage).GetImage();
+            //if(SourceImage != null)
+            //    EditedImage = ColorController.ChangeRGB(r, g, b, SourceImage);
+            this.r = r;
+            this.g = g;
+            this.b = b;
+
+            ProcessingCheck();
         }
         public void ChangeHSL(int h, float s, float l)
         {
-            if (SourceImage != null) 
-                imageBox.Image = ColorController.ChangeHSL(h, s, l, SourceImage).GetImage();
+            //if (SourceImage != null)
+            //    EditedImage = ColorController.ChangeHSL(h, s, l, SourceImage);
+            this.h = h;
+            this.s = s;
+            this.l = l;
+
+            ProcessingCheck();
         }
 
         private void checkGray_CheckedChanged(object sender, EventArgs e)
@@ -188,16 +264,25 @@ namespace RasterFramework
             ProcessingCheck();
         }
 
-        private void checkConv_CheckedChanged(object sender, EventArgs e)
-        {
-            if(ConvEnabled) ConvEnabled = false;
-            else ConvEnabled = true;
-            ProcessingCheck();
-        }
-
         private void convolutionBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            ProcessingCheck();
+            if (convolutionBox.SelectedIndex == convolutionBox.Items.Count - 1)
+            {
+                ConvEditor convEditor = new ConvEditor(ConvMethods);
+                var editor = convEditor.ShowDialog();
+                if(editor == DialogResult.OK)
+                {
+                    ConvMethods = new(convEditor.ConvMethods);
+                    UpdateConvMethods();
+                }
+                convolutionBox.SelectedIndex = 0;
+            }
+            else
+            {
+                if (convolutionBox.SelectedIndex == 0) ConvEnabled = false;
+                else ConvEnabled = true;
+                ProcessingCheck();
+            }
         }
 
         private void numThreshold_ValueChanged(object sender, EventArgs e)
@@ -219,6 +304,18 @@ namespace RasterFramework
             {
                 form1.removeModul(this);
             }
+        }
+
+        private void numZoom_ValueChanged(object sender, EventArgs e)
+        {
+            scale = (double)Convert.ToInt32(numZoom.Value) / 100;
+            width = SourceImage.GetWidth() * scale;
+            height = SourceImage.GetHeight() * scale;
+
+            if (scale == 1) Zoomed = false;
+            else Zoomed = true;
+
+            ProcessingCheck();
         }
     }
 }
