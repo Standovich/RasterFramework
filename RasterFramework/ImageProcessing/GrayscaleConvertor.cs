@@ -1,62 +1,45 @@
 ﻿using RasterFramework.Core;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace RasterFramework.ImageProcessing
 {
     internal class GrayscaleConvertor
     {
-        public static ImageBitmap ApplyGrayScale(int i, ImageBitmap coloredImage)
+        public static Color[,] ToWeightedGrayscale(Color[,] coloredImage)
         {
-            switch (i)
-            {
-                case 0:
-                    return ToAverageGrayscale(coloredImage);
-                case 1:
-                    return ToWeightedGrayscale(coloredImage);
-                default: return coloredImage;
-            }
-        }
-        public static ImageBitmap ToWeightedGrayscale(ImageBitmap coloredImage)
-        {
-            ImageBitmap grayImage = new ImageBitmap(coloredImage.GetWidth(), coloredImage.GetHeight());
+            Color[,] grayImage = new Color[coloredImage.GetLength(0), coloredImage.GetLength(1)];
 
-            for (int y = 0; y < grayImage.GetWidth(); y++)
+            for (int y = 0; y < grayImage.GetLength(0); y++)
             {
-                for (int x = 0; x < grayImage.GetHeight(); x++)
+                for (int x = 0; x < grayImage.GetLength(1); x++)
                 {
-                    int r = coloredImage.GetPixel(y, x).R;
-                    int g = coloredImage.GetPixel(y, x).G;
-                    int b = coloredImage.GetPixel(y, x).B;
+                    int r = coloredImage[y,x].R;
+                    int g = coloredImage[y, x].G;
+                    int b = coloredImage[y, x].B;
                     int gray = (int)((r * 0.299) + (g * 0.587) + (b * 0.114));
 
                     Color grayPixel = Color.FromArgb(255, gray, gray, gray);
-                    grayImage.SetPixel(y,x,grayPixel);
+                    grayImage[y,x] = grayPixel;
                 }
             }
 
             return grayImage;
         }
 
-        public static ImageBitmap ToAverageGrayscale(ImageBitmap coloredImage)
+        public static Color[,] ToAverageGrayscale(Color[,] coloredImage)
         {
-            ImageBitmap grayImage = new ImageBitmap(coloredImage.GetWidth(), coloredImage.GetHeight());
+            Color[,] grayImage = new Color[coloredImage.GetLength(0), coloredImage.GetLength(1)];
 
-            for (int y = 0; y < grayImage.GetWidth(); y++)
+            for (int y = 0; y < grayImage.GetLength(0); y++)
             {
-                for (int x = 0; x < grayImage.GetHeight(); x++)
+                for (int x = 0; x < grayImage.GetLength(1); x++)
                 {
-                    int r = coloredImage.GetPixel(y, x).R;
-                    int g = coloredImage.GetPixel(y, x).G;
-                    int b = coloredImage.GetPixel(y, x).B;
+                    int r = coloredImage[y, x].R;
+                    int g = coloredImage[y, x].G;
+                    int b = coloredImage[y, x].B;
                     int gray = (r / 3) + (g / 3) + (b / 3);
 
                     Color grayPixel = Color.FromArgb(0, gray, gray, gray);
-                    grayImage.SetPixel(y, x, grayPixel);
+                    grayImage[y, x] = grayPixel;
                 }
             }
 

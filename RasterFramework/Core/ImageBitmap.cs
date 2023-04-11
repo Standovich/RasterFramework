@@ -43,7 +43,17 @@ namespace RasterFramework.Core
         }
         public Color[,] GetRawData()
         {
-            return RawData;
+            Color[,] ret = new Color[Width, Height];
+
+            for (int y = 0; y < Width; y++)
+            {
+                for (int x = 0; x < Height; x++)
+                {
+                    ret[y,x] = RawData[y, x];
+                }
+            }
+
+            return ret;
         }
         public Color GetPixel(int y, int x)
         {

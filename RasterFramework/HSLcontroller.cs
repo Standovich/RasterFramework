@@ -44,7 +44,7 @@ namespace RasterFramework
             ImageModul modul = this.Parent as ImageModul;
             if (modul != null)
             {
-                modul.ChangeHSL(hueBar.Value, satBar.Value / 100, ligBar.Value / 100);
+                modul.ChangeHSL(hueBar.Value, satBar.Value / 100f, ligBar.Value / 100f);
             }
         }
 
@@ -68,7 +68,7 @@ namespace RasterFramework
             ImageModul modul = this.Parent as ImageModul;
             if (modul != null)
             {
-                modul.ChangeHSL(hueBar.Value, satBar.Value / 100, ligBar.Value / 100);
+                modul.ChangeHSL(hueBar.Value, satBar.Value / 100f, ligBar.Value / 100f);
             }
         }
     }

@@ -9,42 +9,42 @@ namespace RasterFramework.ImageProcessing
 {
     internal class ColorController
     {
-        public static ImageBitmap ChangeRGB(double r, double g, double b, ImageBitmap sourceImage)
+        public static Color[,] ChangeRGB(double r, double g, double b, Color[,] sourceImage)
         {
-            ImageBitmap newImage = new ImageBitmap(sourceImage.GetWidth(), sourceImage.GetHeight());
+            Color[,] newImage = new Color[sourceImage.GetLength(0), sourceImage.GetLength(1)];
 
-            for (int y = 0; y < newImage.GetWidth(); y++)
+            for (int y = 0; y < newImage.GetLength(0); y++)
             {
-                for (int x = 0; x < newImage.GetHeight(); x++)
+                for (int x = 0; x < newImage.GetLength(1); x++)
                 {
-                    double newR = (r / 100) * sourceImage.GetPixel(y, x).R > 255 
-                        ? 255 : (r / 100) * sourceImage.GetPixel(y, x).R;
-                    double newG = (g / 100) * sourceImage.GetPixel(y, x).G > 255 
-                        ? 255 : (g / 100) * sourceImage.GetPixel(y, x).G;
-                    double newB = (b / 100) * sourceImage.GetPixel(y, x).B > 255 
-                        ? 255 : (b / 100) * sourceImage.GetPixel(y, x).B;
+                    double newR = (r / 100) * sourceImage[y, x].R > 255 
+                        ? 255 : (r / 100) * sourceImage[y, x].R;
+                    double newG = (g / 100) * sourceImage[y, x].G > 255 
+                        ? 255 : (g / 100) * sourceImage[y, x].G;
+                    double newB = (b / 100) * sourceImage[y, x].B > 255 
+                        ? 255 : (b / 100) * sourceImage[y, x].B;
 
                     Color newPixel =
                         Color.FromArgb(255,
                         (int)newR,
                         (int)newG,
                         (int)newB);
-                    newImage.SetPixel(y, x, newPixel);
+                    newImage[y,x] = newPixel;
                 }
             }
 
             return newImage;
         }
 
-        public static ImageBitmap ChangeHSL(int h, float s, float l, ImageBitmap sourceImage)
+        public static Color[,] ChangeHSL(int h, float s, float l, Color[,] sourceImage)
         {
-            ImageBitmap newImage = new ImageBitmap(sourceImage.GetWidth(), sourceImage.GetHeight());
+            Color[,] newImage = new Color[sourceImage.GetLength(0), sourceImage.GetLength(1)];
 
-            for (int y = 0; y < sourceImage.GetWidth(); y++)
+            for (int y = 0; y < sourceImage.GetLength(0); y++)
             {
-                for (int x = 0; x < sourceImage.GetHeight(); x++)
+                for (int x = 0; x < sourceImage.GetLength(1); x++)
                 {
-                    HSL hsl = new(sourceImage.GetPixel(y, x));
+                    HSL hsl = new(sourceImage[y, x]);
 
                     int newHue = hsl.Hue + h;
                     float newSat = hsl.Saturation + s;
@@ -62,7 +62,7 @@ namespace RasterFramework.ImageProcessing
                     else if(newLig > 1) hsl.Lightness = 1;
                     else hsl.Lightness = newLig;
 
-                    newImage.SetPixel(y, x, hsl.ToRGB());
+                    newImage[y, x] = hsl.ToRGB();
                 }
             }
 
