@@ -12,7 +12,7 @@ namespace RasterFramework.ImageProcessing
             {
                 for (int x = 0; x < grayImage.GetLength(1); x++)
                 {
-                    int r = coloredImage[y,x].R;
+                    int r = coloredImage[y, x].R;
                     int g = coloredImage[y, x].G;
                     int b = coloredImage[y, x].B;
                     int gray = (int)((r * 0.299) + (g * 0.587) + (b * 0.114));
@@ -44,14 +44,6 @@ namespace RasterFramework.ImageProcessing
             }
 
             return grayImage;
-        }
-
-        public static int RGBtoGray(Color color)
-        {
-            int r = color.R;
-            int g = color.G;
-            int b = color.B;
-            return (int)((r * 0.299) + (g * 0.587) + (b * 0.114));
         }
     }
 }
