@@ -18,17 +18,17 @@ namespace RasterFramework.Processing
 
             Color[,] grayRawData = new Color[width, height];
 
-            for (int y = 0; y < height; y++)
+            for (int x = 0; x < width; x++)
             {
-                for (int x = 0; x < width; x++)
+                for (int y = 0; y < height; y++)
                 {
-                    int r = sourceRawData[y, x].R;
-                    int g = sourceRawData[y, x].G;
-                    int b = sourceRawData[y, x].B;
+                    int r = sourceRawData[x, y].R;
+                    int g = sourceRawData[x, y].G;
+                    int b = sourceRawData[x, y].B;
                     int gray = (int)((r * 0.299) + (g * 0.587) + (b * 0.114));
 
                     Color grayPixel = Color.FromArgb(255, gray, gray, gray);
-                    grayRawData[y, x] = grayPixel;
+                    grayRawData[x, y] = grayPixel;
                 }
             }
 

@@ -30,7 +30,7 @@ namespace RasterFramework.Core
             return this.rawData;
         }
 
-        public Image LoadFromFile(string fileName)
+        public static Image LoadFromFile(string fileName)
         {
             Bitmap imageToLoad = new Bitmap(fileName);
 
