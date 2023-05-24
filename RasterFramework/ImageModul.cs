@@ -58,7 +58,7 @@ namespace RasterFramework
             }
 
             DrawImage(image.GetRawData());
-            //Processing();
+            Processing();
         }
 
         private void DrawImage(Color[,] rawData)
@@ -99,6 +99,10 @@ namespace RasterFramework
 
         private void Processing()
         {
+            filter = Convolution.Create(ConvolutionType.GaussBlur, ConvolutionSize.S_3);
+
+            image = filter.Apply(image);
+
             DrawImage(image.GetRawData());
         }
 

@@ -8,9 +8,9 @@ namespace RasterFramework.Processing
 {
     internal enum ConvolutionSize
     {
-        S_3 = 3,
-        S_5 = 5,
-        S_7 = 7,
-        S_9 = 9,
+        S_3,
+        S_5,
+        S_7,
+        S_9,
     }
 }
