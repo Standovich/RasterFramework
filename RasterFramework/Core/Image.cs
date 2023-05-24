@@ -30,6 +30,16 @@ namespace RasterFramework.Core
             return this.rawData;
         }
 
+        public int GetWidth()
+        {
+            return this.width;
+        }
+
+        public int GetHeight()
+        {
+            return this.height;
+        }
+
         public static Image LoadFromFile(string fileName)
         {
             Bitmap imageToLoad = new Bitmap(fileName);

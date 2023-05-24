@@ -58,6 +58,7 @@ namespace RasterFramework
             }
 
             DrawImage(image.GetRawData());
+            //Processing();
         }
 
         private void DrawImage(Color[,] rawData)
@@ -98,7 +99,7 @@ namespace RasterFramework
 
         private void Processing()
         {
-
+            DrawImage(image.GetRawData());
         }
 
         private void checkGray_CheckedChanged(object sender, EventArgs e)
