@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace RasterFramework.Processing
 {
-    internal class Convolution
+    internal class Convolution : IFilter
     {
         public ConvolutionType convType;
         public ConvolutionSize convSize;
