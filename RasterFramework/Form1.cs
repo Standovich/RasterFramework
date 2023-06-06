@@ -1,6 +1,3 @@
-using RasterFramework.Core;
-using RasterFramework.ImageProcessing;
-
 namespace RasterFramework
 {
     public partial class Form1 : Form

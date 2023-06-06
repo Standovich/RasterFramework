@@ -31,8 +31,6 @@
             imageBox = new PictureBox();
             txtPictureUI = new Label();
             imgSelectBox = new ComboBox();
-            grayScaleBox = new ComboBox();
-            txtGrayUI = new Label();
             txtConvUI = new Label();
             convolutionBox = new ComboBox();
             checkGray = new CheckBox();
@@ -79,25 +77,6 @@
             imgSelectBox.Size = new Size(121, 23);
             imgSelectBox.TabIndex = 2;
             imgSelectBox.SelectedIndexChanged += imgSelectBox_SelectedIndexChanged;
-            // 
-            // grayScaleBox
-            // 
-            grayScaleBox.FormattingEnabled = true;
-            grayScaleBox.Items.AddRange(new object[] { "Average", "Weighted" });
-            grayScaleBox.Location = new Point(3, 459);
-            grayScaleBox.Name = "grayScaleBox";
-            grayScaleBox.Size = new Size(105, 23);
-            grayScaleBox.TabIndex = 3;
-            grayScaleBox.SelectedIndexChanged += grayScaleBox_SelectedIndexChanged;
-            // 
-            // txtGrayUI
-            // 
-            txtGrayUI.AutoSize = true;
-            txtGrayUI.Location = new Point(3, 441);
-            txtGrayUI.Name = "txtGrayUI";
-            txtGrayUI.Size = new Size(105, 15);
-            txtGrayUI.TabIndex = 4;
-            txtGrayUI.Text = "Grayscale method:";
             // 
             // txtConvUI
             // 
@@ -228,8 +207,6 @@
             Controls.Add(checkGray);
             Controls.Add(convolutionBox);
             Controls.Add(txtConvUI);
-            Controls.Add(txtGrayUI);
-            Controls.Add(grayScaleBox);
             Controls.Add(imgSelectBox);
             Controls.Add(txtPictureUI);
             Name = "ImageModul";
@@ -249,8 +226,6 @@
         private PictureBox imageBox;
         private Label txtPictureUI;
         private ComboBox imgSelectBox;
-        private ComboBox grayScaleBox;
-        private Label txtGrayUI;
         private Label txtConvUI;
         private ComboBox convolutionBox;
         private CheckBox checkGray;

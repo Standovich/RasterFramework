@@ -1,0 +1,13 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace RasterFramework.Core
+{
+    internal interface ILowLevelGraphic
+    {
+        void Apply(Image image, int x, int y);
+    }
+}

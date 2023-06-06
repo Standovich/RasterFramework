@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RasterFramework.Processing;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,14 +13,14 @@ namespace RasterFramework.Core
         public float Saturation { get; set; }
         public float Lightness { get; set; }
 
-        public HSL(int hue, float saturation, float lightness)
+        private HSL(float hue, float saturation, float lightness)
         {
-            Hue = hue;
+            Hue = (int)hue;
             Saturation = saturation;
             Lightness = lightness;
         }
 
-        public HSL(Color color)
+        public static HSL CreateHSL(Color color)
         {
             float r = color.R / 255.0f;
             float g = color.G / 255.0f;
@@ -29,30 +30,34 @@ namespace RasterFramework.Core
             float max = Math.Max(Math.Max(r, g), b);
             float delta = max - min;
 
-            Lightness = (max + min) / 2;
+            float lightness = (max + min) / 2;
+
+            float hue;
+            float saturation;
 
             if (delta == 0)
             {
-                Hue = 0;
-                Saturation = 0.0f;
+                hue = 0;
+                saturation = 0.0f;
             }
             else
             {
-                Saturation = (Lightness <= 0.5) ? (delta / (max + min)) : (delta / (2 - max - min));
-                float hue;
+                saturation = (lightness <= 0.5) ? (delta / (max + min)) : (delta / (2 - max - min));
 
                 if (max == r) hue = ((g - b) / 6) / delta;
                 else if (max == g) hue = (1.0f / 3) + ((b - r) / 6) / delta;
                 else hue = (2.0f / 3) + ((r - g) / 6) / delta;
 
-                if(hue < 0) hue += 1;
-                if(hue > 1) hue -= 1;
+                if (hue < 0) hue += 1;
+                if (hue > 1) hue -= 1;
 
-                Hue = (int)(hue * 360);
+                hue = (int)(hue * 360);
             }
+
+            return new(hue, saturation, lightness);
         }
 
-        public Color ToRGB()
+        public Color GetRGB()
         {
             byte r = 0;
             byte g = 0;
