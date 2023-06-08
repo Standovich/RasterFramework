@@ -28,50 +28,115 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.flPanel = new System.Windows.Forms.FlowLayoutPanel();
-            this.btnAddModul = new System.Windows.Forms.Button();
-            this.SuspendLayout();
+            btnSave = new Button();
+            imgSelectBox = new ComboBox();
+            lblOpenImg = new Label();
+            numZoom = new NumericUpDown();
+            lblScale = new Label();
+            imagePanel = new Panel();
+            imageBox = new PictureBox();
+            ((System.ComponentModel.ISupportInitialize)numZoom).BeginInit();
+            imagePanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)imageBox).BeginInit();
+            SuspendLayout();
             // 
-            // flPanel
+            // btnSave
             // 
-            this.flPanel.AutoScroll = true;
-            this.flPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.flPanel.Location = new System.Drawing.Point(0, 0);
-            this.flPanel.Name = "flPanel";
-            this.flPanel.Padding = new System.Windows.Forms.Padding(0, 64, 0, 0);
-            this.flPanel.Size = new System.Drawing.Size(634, 721);
-            this.flPanel.TabIndex = 0;
+            btnSave.Location = new Point(337, 38);
+            btnSave.Name = "btnSave";
+            btnSave.Size = new Size(75, 23);
+            btnSave.TabIndex = 2;
+            btnSave.Text = "Save";
+            btnSave.UseVisualStyleBackColor = true;
             // 
-            // btnAddModul
+            // imgSelectBox
             // 
-            this.btnAddModul.Font = new System.Drawing.Font("Segoe UI", 15F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.btnAddModul.Location = new System.Drawing.Point(12, 12);
-            this.btnAddModul.Name = "btnAddModul";
-            this.btnAddModul.Size = new System.Drawing.Size(40, 40);
-            this.btnAddModul.TabIndex = 1;
-            this.btnAddModul.Text = "+";
-            this.btnAddModul.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.btnAddModul.UseVisualStyleBackColor = true;
-            this.btnAddModul.Click += new System.EventHandler(this.btnAddModul_Click);
+            imgSelectBox.FormattingEnabled = true;
+            imgSelectBox.Items.AddRange(new object[] { "img1", "img2", "img3", "Select custom" });
+            imgSelectBox.Location = new Point(12, 38);
+            imgSelectBox.Name = "imgSelectBox";
+            imgSelectBox.Size = new Size(121, 23);
+            imgSelectBox.TabIndex = 3;
+            imgSelectBox.SelectedIndexChanged += imgSelectBox_SelectedIndexChanged;
+            // 
+            // lblOpenImg
+            // 
+            lblOpenImg.AutoSize = true;
+            lblOpenImg.Location = new Point(12, 20);
+            lblOpenImg.Name = "lblOpenImg";
+            lblOpenImg.Size = new Size(77, 15);
+            lblOpenImg.TabIndex = 4;
+            lblOpenImg.Text = "Select image:";
+            // 
+            // numZoom
+            // 
+            numZoom.Location = new Point(229, 38);
+            numZoom.Maximum = new decimal(new int[] { 300, 0, 0, 0 });
+            numZoom.Minimum = new decimal(new int[] { 100, 0, 0, 0 });
+            numZoom.Name = "numZoom";
+            numZoom.Size = new Size(49, 23);
+            numZoom.TabIndex = 5;
+            numZoom.Value = new decimal(new int[] { 100, 0, 0, 0 });
+            numZoom.ValueChanged += numZoom_ValueChanged;
+            // 
+            // lblScale
+            // 
+            lblScale.AutoSize = true;
+            lblScale.Location = new Point(163, 41);
+            lblScale.Name = "lblScale";
+            lblScale.Size = new Size(60, 15);
+            lblScale.TabIndex = 6;
+            lblScale.Text = "Zoom (%)";
+            // 
+            // imagePanel
+            // 
+            imagePanel.AutoScroll = true;
+            imagePanel.Controls.Add(imageBox);
+            imagePanel.Location = new Point(12, 67);
+            imagePanel.Name = "imagePanel";
+            imagePanel.Size = new Size(400, 400);
+            imagePanel.TabIndex = 7;
+            // 
+            // imageBox
+            // 
+            imageBox.BorderStyle = BorderStyle.FixedSingle;
+            imageBox.Location = new Point(3, 3);
+            imageBox.Name = "imageBox";
+            imageBox.Size = new Size(394, 394);
+            imageBox.SizeMode = PictureBoxSizeMode.AutoSize;
+            imageBox.TabIndex = 0;
+            imageBox.TabStop = false;
             // 
             // Form1
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(634, 721);
-            this.Controls.Add(this.btnAddModul);
-            this.Controls.Add(this.flPanel);
-            this.MinimumSize = new System.Drawing.Size(600, 760);
-            this.Name = "Form1";
-            this.Text = "Form1";
-            this.Load += new System.EventHandler(this.Form1_Load);
-            this.ResumeLayout(false);
-
+            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleMode = AutoScaleMode.Font;
+            ClientSize = new Size(424, 486);
+            Controls.Add(imagePanel);
+            Controls.Add(lblScale);
+            Controls.Add(numZoom);
+            Controls.Add(lblOpenImg);
+            Controls.Add(imgSelectBox);
+            Controls.Add(btnSave);
+            MinimumSize = new Size(440, 525);
+            Name = "Form1";
+            Text = "Form1";
+            Load += Form1_Load;
+            ((System.ComponentModel.ISupportInitialize)numZoom).EndInit();
+            imagePanel.ResumeLayout(false);
+            imagePanel.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)imageBox).EndInit();
+            ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion
-
-        private FlowLayoutPanel flPanel;
-        private Button btnAddModul;
+        private Button btnSave;
+        private ComboBox imgSelectBox;
+        private Label lblOpenImg;
+        private NumericUpDown numZoom;
+        private Label lblScale;
+        private Panel imagePanel;
+        private PictureBox imageBox;
     }
 }
