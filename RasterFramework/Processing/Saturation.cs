@@ -20,11 +20,11 @@ namespace RasterFramework.Processing
             Color[,] newRawData = newImage.GetRawData();
             Color[,] sourceRawData = sourceImage.GetRawData();
 
-            for (int x = 0; x < width; x++)
+            for (int y = 0; y < height; y++)
             {
-                for (int y = 0; y < height; y++)
+                for (int x = 0; x < width; x++)
                 {
-                    HSL hsl = HSL.CreateHSL(sourceRawData[x, y]);
+                    HSL hsl = HSL.CreateHSL(sourceRawData[y, x]);
 
                     float newSat = hsl.Saturation + coeficient;
 
@@ -32,7 +32,7 @@ namespace RasterFramework.Processing
                     else if (newSat > 1) hsl.Saturation = 1;
                     else hsl.Saturation = newSat;
 
-                    newRawData[x, y] = hsl.GetRGB();
+                    newRawData[y, x] = hsl.GetRGB();
                 }
             }
 

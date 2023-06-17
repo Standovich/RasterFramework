@@ -13,22 +13,19 @@ namespace RasterFramework.Processing
         {
             Color[,] sourceRawData = sourceImage.GetRawData();
 
-            int width = sourceRawData.GetLength(0);
-            int height = sourceRawData.GetLength(1);
+            int width = sourceRawData.GetLength(1);
+            int height = sourceRawData.GetLength(0);
 
-            Color[,] grayRawData = new Color[width, height];
+            Color[,] grayRawData = new Color[height, width];
 
-            for (int x = 0; x < width; x++)
+            for (int y = 0; y < height; y++)
             {
-                for (int y = 0; y < height; y++)
+                for (int x = 0; x < width; x++)
                 {
-                    int r = sourceRawData[x, y].R;
-                    int g = sourceRawData[x, y].G;
-                    int b = sourceRawData[x, y].B;
-                    int gray = (int)((r * 0.299) + (g * 0.587) + (b * 0.114));
+                    int gray = (int)RGB.ToGray(sourceRawData[y, x]);
 
                     Color grayPixel = Color.FromArgb(255, gray, gray, gray);
-                    grayRawData[x, y] = grayPixel;
+                    grayRawData[y, x] = grayPixel;
                 }
             }
 

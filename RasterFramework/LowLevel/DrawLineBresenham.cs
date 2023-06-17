@@ -9,7 +9,7 @@ namespace RasterFramework.LowLevel
 {
     internal class DrawLineBresenham : ILowLevelGraphic
     {
-        public void Apply(Core.Image image, int x, int y)
+        public void Apply(Core.Image image, Point a, Point b)
         {
             throw new NotImplementedException();
         }

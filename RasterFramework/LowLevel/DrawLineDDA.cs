@@ -9,9 +9,10 @@ namespace RasterFramework.LowLevel
 {
     internal class DrawLineDDA : ILowLevelGraphic
     {
-        public void Apply(Core.Image image, int x, int y)
+        public void Apply(Core.Image image, Point a, Point b)
         {
-            throw new NotImplementedException();
+            Color[,] rawData = image.GetRawData();
+            rawData[0,0] = Color.FromArgb(255,0,0);
         }
     }
 }

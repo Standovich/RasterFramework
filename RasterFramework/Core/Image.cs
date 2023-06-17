@@ -17,7 +17,7 @@ namespace RasterFramework.Core
         {
             this.width = width;
             this.height = height;
-            this.rawData = new Color[width, height];
+            this.rawData = new Color[height, width];
         }
 
         public void SetRawData(Color[,] rawData)
@@ -40,18 +40,35 @@ namespace RasterFramework.Core
             return this.height;
         }
 
+        public static Image GetEmptyImage(int width, int height)
+        {
+            Color[,] newRawData = new Color[height, width];
+            for (int y = 0; y < height; y++)
+            {
+                for (int x = 0; x < width; x++)
+                {
+                    newRawData[y, x] = Color.FromArgb(0, 0, 0);
+                }
+            }
+
+            Image retImage = new(width, height);
+            retImage.SetRawData(newRawData);
+
+            return retImage;
+        } 
+
         public static Image LoadFromFile(string fileName)
         {
             Bitmap imageToLoad = new Bitmap(fileName);
 
             Image newImage = new(imageToLoad.Width, imageToLoad.Height);
-            Color[,] rawData = new Color[imageToLoad.Width, imageToLoad.Height];
+            Color[,] rawData = new Color[imageToLoad.Height, imageToLoad.Width];
 
-            for (int x = 0; x < imageToLoad.Width; x++)
+            for (int y = 0; y < imageToLoad.Height; y++)
             {
-                for (int y = 0; y < imageToLoad.Height; y++)
+                for (int x = 0; x < imageToLoad.Width; x++)
                 {
-                    rawData[x,y] = imageToLoad.GetPixel(x, y);
+                    rawData[y, x] = imageToLoad.GetPixel(x, y);
                 }
             }
 
@@ -64,11 +81,11 @@ namespace RasterFramework.Core
         {
             Bitmap imageToSave = new(width, height);
 
-            for (int x = 0; x < width; x++)
+            for (int y = 0; y < height; y++)
             {
-                for (int y = 0; y < height; y++)
+                for (int x = 0; x < width; x++)
                 {
-                    imageToSave.SetPixel(x, y, rawData[x, y]);
+                    imageToSave.SetPixel(y, x, rawData[y, x]);
                 }
             }
 

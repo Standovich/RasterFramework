@@ -1,4 +1,5 @@
 using RasterFramework.Core;
+using RasterFramework.LowLevel;
 using RasterFramework.Processing;
 
 namespace RasterFramework
@@ -7,6 +8,7 @@ namespace RasterFramework
     {
         private Core.Image image;
         IFilter filter;
+        ILowLevelGraphic lowLevelGraphic;
 
         private double imageScale = 1.0;
 
@@ -17,7 +19,15 @@ namespace RasterFramework
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            image = Core.Image.GetEmptyImage(imageBox.Width, imageBox.Height);
+            Processing();
+            DrawImage(image.GetRawData());
+        }
 
+        private void Processing()
+        {
+            lowLevelGraphic = new DrawLineDDA();
+            lowLevelGraphic.Apply(image, new Point(1, 1), new Point(2, 2));
         }
 
         private void imgSelectBox_SelectedIndexChanged(object sender, EventArgs e)
@@ -42,6 +52,7 @@ namespace RasterFramework
                     if (open == DialogResult.OK)
                     {
                         image = Core.Image.LoadFromFile(frmOpenImg.FileName);
+                        imageScale = 1.0;
                     }
                     break;
             }
@@ -52,16 +63,16 @@ namespace RasterFramework
 
         private void DrawImage(Color[,] rawData)
         {
-            int width = rawData.GetLength(0);
-            int height = rawData.GetLength(1);
+            int width = rawData.GetLength(1);
+            int height = rawData.GetLength(0);
 
             Bitmap imageToDraw = new(width, height);
 
-            for (int x = 0; x < width; x++)
+            for (int y = 0; y < height; y++)
             {
-                for (int y = 0; y < height; y++)
+                for (int x = 0; x < width; x++)
                 {
-                    imageToDraw.SetPixel(x, y, rawData[x, y]);
+                    imageToDraw.SetPixel(x, y, rawData[y, x]);
                 }
             }
 
@@ -84,12 +95,6 @@ namespace RasterFramework
             }
 
             return new(imageToResize, new(newX, newY));
-        }
-
-        private void Processing()
-        {
-            //filter = Convolution.Create(ConvolutionType.GaussBlur, ConvolutionSize.S_3);
-            //image = filter.Apply(image);
         }
 
         private void numZoom_ValueChanged(object sender, EventArgs e)
