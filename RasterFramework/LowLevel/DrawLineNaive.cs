@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace RasterFramework.LowLevel
 {
-    internal class DrawLineNative : ILowLevelGraphic
+    internal class DrawLineNaive : ILowLevelGraphic
     {
-        public void Apply(Core.Image image, Point a, Point b)
+        public void Apply(Core.Image image, Point p1, Point p2)
         {
             Color[,] rawData = image.GetRawData();
         }

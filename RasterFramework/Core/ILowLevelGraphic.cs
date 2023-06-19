@@ -8,6 +8,6 @@ namespace RasterFramework.Core
 {
     internal interface ILowLevelGraphic
     {
-        void Apply(Image image, Point a, Point b);
+        void Apply(Image image, Point p0, Point p1);
     }
 }

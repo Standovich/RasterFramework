@@ -17,7 +17,7 @@ namespace RasterFramework.Core
         {
             this.width = width;
             this.height = height;
-            this.rawData = new Color[height, width];
+            this.rawData = GetEmptyData(width, height);
         }
 
         public void SetRawData(Color[,] rawData)
@@ -40,21 +40,17 @@ namespace RasterFramework.Core
             return this.height;
         }
 
-        public static Image GetEmptyImage(int width, int height)
+        public static Color[,] GetEmptyData(int width, int height)
         {
-            Color[,] newRawData = new Color[height, width];
+            Color[,] retRawData = new Color[height, width];
             for (int y = 0; y < height; y++)
             {
                 for (int x = 0; x < width; x++)
                 {
-                    newRawData[y, x] = Color.FromArgb(0, 0, 0);
+                    retRawData[y, x] = Color.FromArgb(0, 0, 0);
                 }
             }
-
-            Image retImage = new(width, height);
-            retImage.SetRawData(newRawData);
-
-            return retImage;
+            return retRawData;
         } 
 
         public static Image LoadFromFile(string fileName)

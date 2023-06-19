@@ -19,7 +19,7 @@ namespace RasterFramework
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            image = Core.Image.GetEmptyImage(imageBox.Width, imageBox.Height);
+            image = new(imageBox.Width, imageBox.Height);
             Processing();
             DrawImage(image.GetRawData());
         }
@@ -27,7 +27,7 @@ namespace RasterFramework
         private void Processing()
         {
             lowLevelGraphic = new DrawLineDDA();
-            lowLevelGraphic.Apply(image, new Point(1, 1), new Point(2, 2));
+            lowLevelGraphic.Apply(image, new Point(50, 100), new Point(250, 250));
         }
 
         private void imgSelectBox_SelectedIndexChanged(object sender, EventArgs e)
@@ -101,6 +101,21 @@ namespace RasterFramework
         {
             imageScale = (double)numZoom.Value / 100;
             DrawImage(image.GetRawData());
+        }
+
+        private void btnSave_Click(object sender, EventArgs e)
+        {
+            SaveFileDialog saveFileDialog = new SaveFileDialog()
+            {
+                Title = "Save image",
+                DefaultExt = "png",
+                Filter = "Image files (*.png)|*.png|All files (*.*)|*.*"
+            };
+            var save = saveFileDialog.ShowDialog();
+            if (save == DialogResult.OK)
+            {
+                image.SaveToFile(saveFileDialog.FileName);
+            }
         }
     }
 }
