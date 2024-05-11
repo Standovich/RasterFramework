@@ -18,10 +18,10 @@ namespace RasterFramework.LowLevel
             int dy = p1.Y - p0.Y;
 
             int step;
-            if(Math.Abs(dx) > Math.Abs(dy)) step = Math.Abs(dx);
+            if (Math.Abs(dx) > Math.Abs(dy)) step = Math.Abs(dx);
             else step = Math.Abs(dy);
 
-            double incrementX = dx / step, incrementY = dy / step;
+            double incrementX = (double)dx / (double)step, incrementY = (double)dy / (double)step;
             double x = p0.X, y = p0.Y;
 
             for (int i = 0; i < step; i++)

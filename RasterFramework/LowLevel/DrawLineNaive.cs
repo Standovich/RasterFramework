@@ -9,9 +9,25 @@ namespace RasterFramework.LowLevel
 {
     internal class DrawLineNaive : ILowLevelGraphic
     {
-        public void Apply(Core.Image image, Point p1, Point p2)
+        public void Apply(Core.Image image, Point p0, Point p1)
         {
             Color[,] rawData = image.GetRawData();
+            Color colorToDraw = Color.FromArgb(255, 0, 0);
+
+            if(p1.X < p0.X)
+            {
+                (p1.X, p0.X) = (p0.X, p1.X);
+                (p1.Y, p0.Y) = (p0.Y, p1.Y);
+            }
+
+            int dx = p1.X - p0.X;
+            int dy = p1.Y - p0.Y;
+
+            for (int x = p0.X; x < p1.X; x++)
+            {
+                int y = p0.Y + dy * (x - p0.X) / dx;
+                rawData[y, x] = colorToDraw;
+            }
         }
     }
 }

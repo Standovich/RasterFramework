@@ -10,6 +10,7 @@ namespace RasterFramework.LowLevel
 {
     internal class DrawLineBresenham : ILowLevelGraphic
     {
+        Color colorToDraw = Color.FromArgb(255, 0, 0);
         public void Apply(Core.Image image, Point p0, Point p1)
         {
             Color[,] rawData = image.GetRawData();
@@ -22,18 +23,12 @@ namespace RasterFramework.LowLevel
 
         private void DrawYLine(Color[,] rawData, Point p0, Point p1)
         {
-            Color colorToDraw = Color.FromArgb(255, 0, 0);
             int d = 1;
 
             if(p1.X < p0.X)
             {
-                int temp = p0.X;
-                p0.X = p1.X;
-                p1.X = temp;
-
-                temp = p0.Y;
-                p0.Y = p1.Y;
-                p1.Y = temp;
+                (p1.X, p0.X) = (p0.X, p1.X);
+                (p1.Y, p0.Y) = (p0.Y, p1.Y);
 
                 int h1 = 2 * (p1.Y - p0.Y);
                 int y = p0.Y;
@@ -47,7 +42,7 @@ namespace RasterFramework.LowLevel
                 int h2 = h1 - 2 * (p1.X - p0.X);
                 int h = h1 - (p1.X - p0.X);
 
-                for(int i = p0.X; i < p1.X; i++)
+                for(int x = p0.X; x < p1.X; x++)
                 {
                     if (h > 0)
                     {
@@ -55,7 +50,7 @@ namespace RasterFramework.LowLevel
                         y += d;
                     }
                     else h += h1;
-                    rawData[i, y] = colorToDraw;
+                    rawData[y, x] = colorToDraw;
                 }
             }
             else
@@ -72,7 +67,7 @@ namespace RasterFramework.LowLevel
                 int h2 = h1 - 2 * (p1.X - p0.X);
                 int h = h1 - (p1.X - p0.X);
 
-                for (int i = p0.X; i < p1.X; i++)
+                for (int x = p0.X; x < p1.X; x++)
                 {
                     if(h > 0)
                     {
@@ -80,25 +75,19 @@ namespace RasterFramework.LowLevel
                         y += d;
                     }
                     else h += h1;
-                    rawData[i, y] = colorToDraw;
+                    rawData[y, x] = colorToDraw;
                 }
             }
         }
 
         private void DrawXLine(Color[,] rawData, Point p0, Point p1)
         {
-            Color colorToDraw = Color.FromArgb(255, 0, 0);
             int d = 1;
 
             if (p1.Y < p0.Y)
             {
-                int temp = p0.Y;
-                p0.Y = p1.Y;
-                p1.Y = temp;
-
-                temp = p0.X;
-                p0.X = p1.X;
-                p1.X = temp;
+                (p1.X, p0.X) = (p0.X, p1.X);
+                (p1.Y, p0.Y) = (p0.Y, p1.Y);
 
                 int h1 = 2 * (p1.X - p0.X);
                 int x = p0.X;
@@ -112,7 +101,7 @@ namespace RasterFramework.LowLevel
                 int h2 = h1 - 2 * (p1.Y - p0.Y);
                 int h = h1 - (p1.Y - p0.Y);
 
-                for (int i = p0.Y; i < p1.Y; i++)
+                for (int y = p0.Y; y < p1.Y; y++)
                 {
                     if (h > 0)
                     {
@@ -120,7 +109,7 @@ namespace RasterFramework.LowLevel
                         x += d;
                     }
                     else h += h1;
-                    rawData[x, i] = colorToDraw;
+                    rawData[y, x] = colorToDraw;
                 }
             }
             else
@@ -137,7 +126,7 @@ namespace RasterFramework.LowLevel
                 int h2 = h1 - 2 * (p1.Y - p0.Y);
                 int h = h1 - (p1.Y - p0.Y);
 
-                for (int i = p0.Y; i < p1.Y; i++)
+                for (int y = p0.Y; y < p1.Y; y++)
                 {
                     if (h > 0)
                     {
@@ -145,7 +134,7 @@ namespace RasterFramework.LowLevel
                         x += d;
                     }
                     else h += h1;
-                    rawData[x, i] = colorToDraw;
+                    rawData[y, x] = colorToDraw;
                 }
             }
         }

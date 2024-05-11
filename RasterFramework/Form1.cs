@@ -26,8 +26,15 @@ namespace RasterFramework
 
         private void Processing()
         {
-            lowLevelGraphic = new DrawLineDDA();
-            lowLevelGraphic.Apply(image, new Point(50, 100), new Point(250, 250));
+            //Point[] points = { new(100, 200), new(100, 100), new(300, 300), new(300, 200) };
+            //DrawBezier bezier = new();
+            //bezier.Apply(image, points);
+
+            //lowLevelGraphic = new DrawLineBresenham();
+            //lowLevelGraphic.Apply(image, new Point(200, 200), new Point(300, 250));
+
+            //filter = new GrayScale();
+            //image = filter.Apply(image);
         }
 
         private void imgSelectBox_SelectedIndexChanged(object sender, EventArgs e)
@@ -105,7 +112,7 @@ namespace RasterFramework
 
         private void btnSave_Click(object sender, EventArgs e)
         {
-            SaveFileDialog saveFileDialog = new SaveFileDialog()
+            SaveFileDialog saveFileDialog = new()
             {
                 Title = "Save image",
                 DefaultExt = "png",

@@ -81,7 +81,7 @@ namespace RasterFramework.Core
             {
                 for (int x = 0; x < width; x++)
                 {
-                    imageToSave.SetPixel(y, x, rawData[y, x]);
+                    imageToSave.SetPixel(x, y, rawData[y, x]);
                 }
             }
 
