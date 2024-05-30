@@ -9,7 +9,6 @@ namespace RasterFramework.Processing
 {
     internal class Convolution : IFilter
     {
-        public Convolution() { }
         public static Convolution Create(ConvolutionType type, ConvolutionSize size)
         {
             Convolution ret = new();
@@ -138,19 +137,47 @@ namespace RasterFramework.Processing
                             break;
                     }
                     break;
+                case ConvolutionType.EdgeDetection:
+                    switch (size)
+                    {
+                        case ConvolutionSize.S_3:
+                            ret = new EdbeDetect(new double[,]
+                            {
+                                { -1, -1, -1 },
+                                { -1, 8, -1 },
+                                { -1, -1, -1 } });
+                            break;
+                        case ConvolutionSize.S_5:
+                            ret = new EdbeDetect(new double[,]
+                            {
+                                { -1, -1, -1 },
+                                { -1, 8, -1 },
+                                { -1, -1, -1 } });
+                            break;
+                        case ConvolutionSize.S_7:
+                            ret = new EdbeDetect(new double[,]
+                            {
+                                { -1, -1, -1 },
+                                { -1, 8, -1 },
+                                { -1, -1, -1 } });
+                            break;
+                        case ConvolutionSize.S_9:
+                            ret = new EdbeDetect(new double[,]
+                            {
+                                { -1, -1, -1 },
+                                { -1, 8, -1 },
+                                { -1, -1, -1 } });
+                            break;
+                    }
+                    break;
             }
 
             return ret;
         }
 
-        public virtual Core.Image Apply(Core.Image sourceImage)
+        public Core.Image Apply(Core.Image sourceImage)
         {
-            throw new NotImplementedException();
-        }
-
-        public string GetFilterDescription()
-        {
-            throw new NotImplementedException();
+            return sourceImage;
         }
     }
 }

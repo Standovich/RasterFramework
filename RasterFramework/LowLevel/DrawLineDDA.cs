@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace RasterFramework.LowLevel
 {
-    internal class DrawLineDDA : ILowLevelGraphic
+    internal class DrawLineDDA : ILowLevelLine
     {
         public void Apply(Core.Image image, Point p0, Point p1)
         {

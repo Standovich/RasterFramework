@@ -29,10 +29,7 @@ namespace RasterFramework.Processing
                 }
             }
 
-            Core.Image grayImage = new(width, height);
-            grayImage.SetRawData(grayRawData);
-
-            return grayImage;
+            return new(grayRawData);
         }
 
         public string GetFilterDescription()

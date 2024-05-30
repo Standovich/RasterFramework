@@ -42,7 +42,8 @@ namespace RasterFramework.Core
             }
             else
             {
-                saturation = (lightness <= 0.5) ? (delta / (max + min)) : (delta / (2 - max - min));
+                saturation = (lightness <= 0.5) ? 
+                    (delta / (max + min)) : (delta / (2 - max - min));
 
                 if (max == r) hue = ((g - b) / 6) / delta;
                 else if (max == g) hue = (1.0f / 3) + ((b - r) / 6) / delta;

@@ -15,7 +15,7 @@ namespace RasterFramework.Processing
             this.kernel = kernel;
         }
 
-        public override Core.Image Apply(Core.Image sourceImage)
+        public new Core.Image Apply(Core.Image sourceImage)
         {
             int width = sourceImage.GetWidth();
             int height = sourceImage.GetHeight();

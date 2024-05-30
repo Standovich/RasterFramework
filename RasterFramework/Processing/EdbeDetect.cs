@@ -15,9 +15,57 @@ namespace RasterFramework.Processing
             this.kernel = kernel;
         }
 
-        public override Core.Image Apply(Core.Image sourceImage)
+        public new Core.Image Apply(Core.Image sourceImage)
         {
-            return null;
+            int width = sourceImage.GetWidth();
+            int height = sourceImage.GetHeight();
+            Color[,] sourceRawData = sourceImage.GetRawData();
+            Color[,] newRawData = new Color[height, width];
+
+            double[,] redData = new double[height, width];
+            double[,] greenData = new double[height, width];
+            double[,] blueData = new double[height, width];
+            int distance = kernel.GetLength(0) / 2;
+
+            //vnitřní pixely
+            for (int y = distance; y < height - distance; y++)
+            {
+                for (int x = distance; x < width - distance; x++)
+                {
+                    for (int ky = 0; ky < kernel.GetLength(0); ky++)
+                    {
+                        int indexY = y + ky - distance;
+                        for (int kx = 0; kx < kernel.GetLength(1); kx++)
+                        {
+                            int indexX = x + kx - distance;
+                            redData[y, x] += sourceRawData[indexY, indexX].R * kernel[ky, kx];
+                            greenData[y, x] += sourceRawData[indexY, indexX].G * kernel[ky, kx];
+                            blueData[y, x] += sourceRawData[indexY, indexX].B * kernel[ky, kx];
+                        }
+                    }
+                }
+            }
+
+            //naplnit novou bitmapu
+            for (int y = 0; y < height; y++)
+            {
+                for (int x = 0; x < width; x++)
+                {
+                    if ((redData[y, x] > 255) || (redData[y, x] < 0)) redData[y, x] = sourceRawData[y, x].R;
+                    if ((greenData[y, x] > 255) || (greenData[y, x] < 0)) greenData[y, x] = sourceRawData[y, x].G;
+                    if ((blueData[y, x] > 255) || (blueData[y, x] < 0)) blueData[y, x] = sourceRawData[y, x].B;
+
+                    newRawData[y, x] = Color.FromArgb(
+                        (int)redData[y, x],
+                        (int)greenData[y, x],
+                        (int)blueData[y, x]);
+                }
+            }
+
+            Core.Image newImage = new(width, height);
+            newImage.SetRawData(newRawData);
+
+            return newImage;
         }
     }
 }

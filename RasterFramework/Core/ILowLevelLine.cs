@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace RasterFramework.Core
 {
-    internal interface IFilter
+    internal interface ILowLevelLine
     {
-        Image Apply(Image sourceImage);
+        void Apply(Image image, Point p0, Point p1);
     }
 }

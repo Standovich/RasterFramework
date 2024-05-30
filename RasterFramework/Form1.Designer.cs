@@ -93,17 +93,17 @@
             // 
             imagePanel.AutoScroll = true;
             imagePanel.Controls.Add(imageBox);
-            imagePanel.Location = new Point(12, 67);
+            imagePanel.Location = new Point(9, 67);
             imagePanel.Name = "imagePanel";
-            imagePanel.Size = new Size(400, 400);
+            imagePanel.Size = new Size(403, 403);
             imagePanel.TabIndex = 7;
             // 
             // imageBox
             // 
             imageBox.BorderStyle = BorderStyle.FixedSingle;
-            imageBox.Location = new Point(3, 3);
+            imageBox.Location = new Point(0, 0);
             imageBox.Name = "imageBox";
-            imageBox.Size = new Size(394, 394);
+            imageBox.Size = new Size(400, 400);
             imageBox.SizeMode = PictureBoxSizeMode.AutoSize;
             imageBox.TabIndex = 0;
             imageBox.TabStop = false;

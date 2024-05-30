@@ -20,6 +20,13 @@ namespace RasterFramework.Core
             this.rawData = GetEmptyData(width, height);
         }
 
+        public Image(Color[,] newRawData)
+        {
+            this.width = newRawData.GetLength(1);
+            this.height = newRawData.GetLength(0);
+            this.rawData = newRawData;
+        }
+
         public void SetRawData(Color[,] rawData)
         {
             this.rawData = rawData;
@@ -51,6 +58,23 @@ namespace RasterFramework.Core
                 }
             }
             return retRawData;
+
+            //Color[,] retRawData = new Color[height, width];
+            //unsafe
+            //{
+            //    fixed (Color* rawData = &retRawData[0, 0])
+            //    {
+            //        Color* rawDataPointer = rawData;
+            //        for (int y = 0; y < height; y++)
+            //        {
+            //            for (int x = 0; x < width; x++)
+            //            {
+            //                rawDataPointer[y, x] = Color.FromArgb(0, 0, 0);
+            //            }
+            //        }
+            //    }
+            //}
+            //return retRawData;
         } 
 
         public static Image LoadFromFile(string fileName)

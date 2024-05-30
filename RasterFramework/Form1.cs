@@ -7,8 +7,9 @@ namespace RasterFramework
     public partial class Form1 : Form
     {
         private Core.Image image;
-        IFilter filter;
-        ILowLevelGraphic lowLevelGraphic;
+        private IFilter filter;
+        private ILowLevelLine line;
+        private ILowLevelCurve curve;
 
         private double imageScale = 1.0;
 
@@ -26,15 +27,8 @@ namespace RasterFramework
 
         private void Processing()
         {
-            //Point[] points = { new(100, 200), new(100, 100), new(300, 300), new(300, 200) };
-            //DrawBezier bezier = new();
-            //bezier.Apply(image, points);
-
-            //lowLevelGraphic = new DrawLineBresenham();
-            //lowLevelGraphic.Apply(image, new Point(200, 200), new Point(300, 250));
-
-            //filter = new GrayScale();
-            //image = filter.Apply(image);
+            line = new DrawLineNaive();
+            line.Apply(image, new Point(50, 75), new Point(250, 300));
         }
 
         private void imgSelectBox_SelectedIndexChanged(object sender, EventArgs e)

@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace RasterFramework.LowLevel
 {
-    internal class DrawBezier
+    internal class DrawBezier : ILowLevelCurve
     {
-        DrawLineDDA drawLine = new();
+        private ILowLevelLine drawLine = new DrawLineBresenham();
         public void Apply(Core.Image image, Point[] points)
         {
             double d = 0.01;
