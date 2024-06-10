@@ -9,10 +9,10 @@ namespace RasterFramework.Processing
 {
     internal class Saturation : IFilter
     {
-        private float coeficient = 0f;
-
         public Core.Image Apply(Core.Image sourceImage)
         {
+            float coeficient = 0f;
+
             int width = sourceImage.GetWidth();
             int height = sourceImage.GetHeight();
 

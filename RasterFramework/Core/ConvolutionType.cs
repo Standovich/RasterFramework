@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RasterFramework.Processing
+namespace RasterFramework.Core
 {
     internal enum ConvolutionType
     {

@@ -7,15 +7,9 @@ using System.Threading.Tasks;
 
 namespace RasterFramework.Processing
 {
-    internal class Blur : Convolution
+    internal class Blur : IConvolution
     {
-        public double[,] kernel;
-        public Blur(double[,] kernel)
-        {
-            this.kernel = kernel;
-        }
-
-        public new Core.Image Apply(Core.Image sourceImage)
+        public Core.Image Apply(Core.Image sourceImage, double[,] kernel)
         {
             int width = sourceImage.GetWidth();
             int height = sourceImage.GetHeight();

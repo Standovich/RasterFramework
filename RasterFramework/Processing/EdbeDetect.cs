@@ -7,15 +7,9 @@ using System.Threading.Tasks;
 
 namespace RasterFramework.Processing
 {
-    internal class EdbeDetect : Convolution
+    internal class EdbeDetect : IConvolution
     {
-        public double[,] kernel;
-        public EdbeDetect(double[,] kernel)
-        {
-            this.kernel = kernel;
-        }
-
-        public new Core.Image Apply(Core.Image sourceImage)
+        public Core.Image Apply(Core.Image sourceImage, double[,] kernel)
         {
             int width = sourceImage.GetWidth();
             int height = sourceImage.GetHeight();

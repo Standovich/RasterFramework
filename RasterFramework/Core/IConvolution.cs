@@ -4,13 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RasterFramework.Processing
+namespace RasterFramework.Core
 {
-    internal enum ConvolutionSize
+    internal interface IConvolution
     {
-        S_3,
-        S_5,
-        S_7,
-        S_9,
+        Image Apply(Image sourceImage, double[,] kernel);
     }
 }

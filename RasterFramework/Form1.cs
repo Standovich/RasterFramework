@@ -8,6 +8,7 @@ namespace RasterFramework
     {
         private Core.Image image;
         private IFilter filter;
+        private IConvolution convolution;
         private ILowLevelLine line;
         private ILowLevelCurve curve;
 
