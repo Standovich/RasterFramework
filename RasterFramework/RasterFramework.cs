@@ -4,7 +4,7 @@ using RasterFramework.Processing;
 
 namespace RasterFramework
 {
-    public partial class Form1 : Form
+    public partial class RasterFramework : Form
     {
         private Core.Image image;
         private IFilter filter;
@@ -14,7 +14,7 @@ namespace RasterFramework
 
         private double imageScale = 1.0;
 
-        public Form1()
+        public RasterFramework()
         {
             InitializeComponent();
         }
@@ -28,8 +28,18 @@ namespace RasterFramework
 
         private void Processing()
         {
-            line = new DrawLineNaive();
-            line.Apply(image, new Point(50, 75), new Point(250, 300));
+            //line = new DrawLineNaive();
+            //line.Apply(image, new Point(50, 75), new Point(250, 300));
+
+            //Point[] points = { new(50, 300), new(75, 150), new(250, 300), new(350, 100) };
+            //curve = new DrawCubic();
+            //curve.Apply(image, points);
+
+            filter = new GrayScale();
+            image = filter.Apply(image);
+
+            //convolution = new Sharpen();
+            //image = convolution.Apply(image, GenerateKernel.GetKernel(ConvolutionType.Sharpen));
         }
 
         private void imgSelectBox_SelectedIndexChanged(object sender, EventArgs e)
@@ -118,6 +128,12 @@ namespace RasterFramework
             {
                 image.SaveToFile(saveFileDialog.FileName);
             }
+        }
+
+        private void btnNewInstance_Click(object sender, EventArgs e)
+        {
+            RasterFramework newInstance = new();
+            newInstance.Show();
         }
     }
 }

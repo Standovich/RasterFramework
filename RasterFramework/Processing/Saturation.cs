@@ -11,7 +11,7 @@ namespace RasterFramework.Processing
     {
         public Core.Image Apply(Core.Image sourceImage)
         {
-            float coeficient = 0f;
+            float coeficient = 0.3f;
 
             int width = sourceImage.GetWidth();
             int height = sourceImage.GetHeight();
@@ -38,11 +38,6 @@ namespace RasterFramework.Processing
 
             newImage.SetRawData(newRawData);
             return newImage;
-        }
-
-        public string GetFilterDescription()
-        {
-            return "Umožňuje úpravu barev obrazu pomocí HSL modelu.";
         }
     }
 }

@@ -31,10 +31,5 @@ namespace RasterFramework.Processing
 
             return new(grayRawData);
         }
-
-        public string GetFilterDescription()
-        {
-            return "Vrací objekt třídy Image s polem pixelů převedených do šedé škály.";
-        }
     }
 }

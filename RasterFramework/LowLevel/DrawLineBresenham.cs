@@ -10,7 +10,7 @@ namespace RasterFramework.LowLevel
 {
     internal class DrawLineBresenham : ILowLevelLine
     {
-        Color colorToDraw = Color.FromArgb(255, 0, 0);
+        Color colorToDraw = Color.FromArgb(0, 0, 255);
         public void Apply(Core.Image image, Point p0, Point p1)
         {
             Color[,] rawData = image.GetRawData();

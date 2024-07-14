@@ -10,21 +10,16 @@ namespace RasterFramework.Core
     {
         public static double[,] GetKernel(ConvolutionType type)
         {
-            return SelectKernel(type);
-        }
-
-        private static double[,] SelectKernel(ConvolutionType type)
-        {
             double[,] ret = null;
             switch (type)
             {
-                case ConvolutionType.BoxBlur:
+                case ConvolutionType.BoxBlur3x3:
                     ret = new double[,] {
                     {1, 1, 1},
                     {1, 1, 1},
                     {1, 1, 1} };
                     break;
-                case ConvolutionType.GaussBlur:
+                case ConvolutionType.GaussBlur3x3:
                     ret = new double[,] {
                     {1, 2, 1},
                     {2, 4, 2},

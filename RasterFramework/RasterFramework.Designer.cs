@@ -1,6 +1,6 @@
 ﻿namespace RasterFramework
 {
-    partial class Form1
+    partial class RasterFramework
     {
         /// <summary>
         ///  Required designer variable.
@@ -35,6 +35,7 @@
             lblScale = new Label();
             imagePanel = new Panel();
             imageBox = new PictureBox();
+            btnNewInstance = new Button();
             ((System.ComponentModel.ISupportInitialize)numZoom).BeginInit();
             imagePanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)imageBox).BeginInit();
@@ -46,14 +47,14 @@
             btnSave.Name = "btnSave";
             btnSave.Size = new Size(75, 23);
             btnSave.TabIndex = 2;
-            btnSave.Text = "Save";
+            btnSave.Text = "Uložit";
             btnSave.UseVisualStyleBackColor = true;
             btnSave.Click += btnSave_Click;
             // 
             // imgSelectBox
             // 
             imgSelectBox.FormattingEnabled = true;
-            imgSelectBox.Items.AddRange(new object[] { "img1", "img2", "img3", "Select custom" });
+            imgSelectBox.Items.AddRange(new object[] { "Obrázek1", "Obrázek2", "Obrázek3", "Vlastní obrázek" });
             imgSelectBox.Location = new Point(12, 38);
             imgSelectBox.Name = "imgSelectBox";
             imgSelectBox.Size = new Size(121, 23);
@@ -65,13 +66,13 @@
             lblOpenImg.AutoSize = true;
             lblOpenImg.Location = new Point(12, 20);
             lblOpenImg.Name = "lblOpenImg";
-            lblOpenImg.Size = new Size(77, 15);
+            lblOpenImg.Size = new Size(88, 15);
             lblOpenImg.TabIndex = 4;
-            lblOpenImg.Text = "Select image:";
+            lblOpenImg.Text = "Vybrat obrázek:";
             // 
             // numZoom
             // 
-            numZoom.Location = new Point(229, 38);
+            numZoom.Location = new Point(147, 38);
             numZoom.Maximum = new decimal(new int[] { 300, 0, 0, 0 });
             numZoom.Minimum = new decimal(new int[] { 100, 0, 0, 0 });
             numZoom.Name = "numZoom";
@@ -83,11 +84,11 @@
             // lblScale
             // 
             lblScale.AutoSize = true;
-            lblScale.Location = new Point(163, 41);
+            lblScale.Location = new Point(147, 20);
             lblScale.Name = "lblScale";
-            lblScale.Size = new Size(60, 15);
+            lblScale.Size = new Size(76, 15);
             lblScale.TabIndex = 6;
-            lblScale.Text = "Zoom (%)";
+            lblScale.Text = "Přiblížení (%)";
             // 
             // imagePanel
             // 
@@ -108,11 +109,22 @@
             imageBox.TabIndex = 0;
             imageBox.TabStop = false;
             // 
-            // Form1
+            // btnNewInstance
+            // 
+            btnNewInstance.Location = new Point(254, 38);
+            btnNewInstance.Name = "btnNewInstance";
+            btnNewInstance.Size = new Size(77, 23);
+            btnNewInstance.TabIndex = 8;
+            btnNewInstance.Text = "Přidat okno";
+            btnNewInstance.UseVisualStyleBackColor = true;
+            btnNewInstance.Click += btnNewInstance_Click;
+            // 
+            // RasterFramework
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(424, 486);
+            Controls.Add(btnNewInstance);
             Controls.Add(imagePanel);
             Controls.Add(lblScale);
             Controls.Add(numZoom);
@@ -120,8 +132,8 @@
             Controls.Add(imgSelectBox);
             Controls.Add(btnSave);
             MinimumSize = new Size(440, 525);
-            Name = "Form1";
-            Text = "Form1";
+            Name = "RasterFramework";
+            Text = "RasterFramework";
             Load += Form1_Load;
             ((System.ComponentModel.ISupportInitialize)numZoom).EndInit();
             imagePanel.ResumeLayout(false);
@@ -139,5 +151,6 @@
         private Label lblScale;
         private Panel imagePanel;
         private PictureBox imageBox;
+        private Button btnNewInstance;
     }
 }

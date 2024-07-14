@@ -12,7 +12,7 @@ namespace RasterFramework.LowLevel
         public void Apply(Core.Image image, Point p0, Point p1)
         {
             Color[,] rawData = image.GetRawData();
-            Color colorToDraw = Color.FromArgb(255, 0, 0);
+            Color colorToDraw = Color.FromArgb(255, 255, 0);
 
             int dx = p1.X - p0.X;
             int dy = p1.Y - p0.Y;
