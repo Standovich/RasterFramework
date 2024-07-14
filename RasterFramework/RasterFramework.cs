@@ -35,11 +35,13 @@ namespace RasterFramework
             //curve = new DrawCubic();
             //curve.Apply(image, points);
 
-            filter = new GrayScale();
-            image = filter.Apply(image);
+            //filter = new GrayScale();
+            //image = filter.Apply(image);
 
-            //convolution = new Sharpen();
-            //image = convolution.Apply(image, GenerateKernel.GetKernel(ConvolutionType.Sharpen));
+            double[,] kernel = GenerateKernel.GetKernel(ConvolutionType.Sharpen);
+
+            convolution = new Sharpen();
+            image = convolution.Apply(image, kernel);
         }
 
         private void imgSelectBox_SelectedIndexChanged(object sender, EventArgs e)
@@ -58,7 +60,7 @@ namespace RasterFramework
                 case 3:
                     OpenFileDialog frmOpenImg = new OpenFileDialog()
                     {
-                        Title = "Open image"
+                        Title = "Otevøít obrázek"
                     };
                     var open = frmOpenImg.ShowDialog();
                     if (open == DialogResult.OK)
@@ -119,7 +121,7 @@ namespace RasterFramework
         {
             SaveFileDialog saveFileDialog = new()
             {
-                Title = "Save image",
+                Title = "Uložit obrázek",
                 DefaultExt = "png",
                 Filter = "Image files (*.png)|*.png|All files (*.*)|*.*"
             };

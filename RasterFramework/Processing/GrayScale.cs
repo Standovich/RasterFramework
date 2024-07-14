@@ -22,7 +22,7 @@ namespace RasterFramework.Processing
             {
                 for (int x = 0; x < width; x++)
                 {
-                    int gray = (int)RGB.ToGray(sourceRawData[y, x]);
+                    int gray = (int)ToGray(sourceRawData[y, x]);
 
                     Color grayPixel = Color.FromArgb(255, gray, gray, gray);
                     grayRawData[y, x] = grayPixel;
@@ -30,6 +30,14 @@ namespace RasterFramework.Processing
             }
 
             return new(grayRawData);
+        }
+
+        private static double ToGray(Color color)
+        {
+            int r = color.R;
+            int g = color.G;
+            int b = color.B;
+            return (r * 0.299) + (g * 0.587) + (b * 0.114);
         }
     }
 }
