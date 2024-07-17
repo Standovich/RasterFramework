@@ -73,12 +73,12 @@
             // numZoom
             // 
             numZoom.Location = new Point(147, 38);
-            numZoom.Maximum = new decimal(new int[] { 300, 0, 0, 0 });
-            numZoom.Minimum = new decimal(new int[] { 100, 0, 0, 0 });
+            numZoom.Maximum = new decimal(new int[] { 5, 0, 0, 0 });
+            numZoom.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
             numZoom.Name = "numZoom";
             numZoom.Size = new Size(49, 23);
             numZoom.TabIndex = 5;
-            numZoom.Value = new decimal(new int[] { 100, 0, 0, 0 });
+            numZoom.Value = new decimal(new int[] { 1, 0, 0, 0 });
             numZoom.ValueChanged += numZoom_ValueChanged;
             // 
             // lblScale
@@ -86,9 +86,9 @@
             lblScale.AutoSize = true;
             lblScale.Location = new Point(147, 20);
             lblScale.Name = "lblScale";
-            lblScale.Size = new Size(76, 15);
+            lblScale.Size = new Size(54, 15);
             lblScale.TabIndex = 6;
-            lblScale.Text = "Přiblížení (%)";
+            lblScale.Text = "Zvětšení:";
             // 
             // imagePanel
             // 

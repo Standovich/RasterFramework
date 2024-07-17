@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace RasterFramework.LowLevel
 {
-    internal class DrawLineNaive : ILowLevelLine
+    internal class DrawLineNaive : IDrawLine
     {
         public void Apply(Core.Image image, Point p0, Point p1)
         {

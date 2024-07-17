@@ -7,12 +7,14 @@ namespace RasterFramework
     public partial class RasterFramework : Form
     {
         private Core.Image image;
+        private IDrawLine line;
+        private IDrawCurve curve;
+        private IDrawFill fill;
         private IFilter filter;
         private IConvolution convolution;
-        private ILowLevelLine line;
-        private ILowLevelCurve curve;
 
-        private double imageScale = 1.0;
+        private int imageScale = 1;
+        private int prevImageScale = 1;
 
         public RasterFramework()
         {
@@ -38,10 +40,10 @@ namespace RasterFramework
             //filter = new GrayScale();
             //image = filter.Apply(image);
 
-            double[,] kernel = GenerateKernel.GetKernel(ConvolutionType.Sharpen);
+            //double[,] kernel = GenerateKernel.GetKernel(ConvolutionType.GaussBlur3x3);
 
-            convolution = new Sharpen();
-            image = convolution.Apply(image, kernel);
+            //convolution = new Blur();
+            //image = convolution.Apply(image, kernel);
         }
 
         private void imgSelectBox_SelectedIndexChanged(object sender, EventArgs e)
@@ -66,7 +68,7 @@ namespace RasterFramework
                     if (open == DialogResult.OK)
                     {
                         image = Core.Image.LoadFromFile(frmOpenImg.FileName);
-                        imageScale = 1.0;
+                        imageScale = 1;
                     }
                     break;
             }
@@ -90,31 +92,50 @@ namespace RasterFramework
                 }
             }
 
-            imageBox.Image = ResizeImg(imageToDraw);
+            imageBox.Image = imageToDraw;
         }
 
-        private Bitmap ResizeImg(Bitmap imageToResize)
+        private Color[,] ResizeImage()
         {
-            double ratioX = imagePanel.Width / imageToResize.Width;
-            double ratioY = imagePanel.Height / imageToResize.Height;
-            double ratio = Math.Min(ratioX, ratioY);
+            Color[,] rawData = image.GetRawData();
+            int height = image.GetHeight();
+            int width = image.GetWidth();
 
-            int newX = (int)(imageToResize.Width * ratio);
-            int newY = (int)(imageToResize.Height * ratio);
+            int scale = imageScale;
 
-            if (imageScale != 1.0)
+            int newHeight = height * scale;
+            int newWidht = width * scale;
+            Color[,] newRawData = new Color[newHeight, newWidht];
+
+            int startX = 0; int startY = 0;
+
+            for (int y1 = 0; y1 < height; y1++)
             {
-                newX = (int)(newX * imageScale);
-                newY = (int)(newY * imageScale);
+                for (int x1 = 0; x1 < width; x1++)
+                {
+                    for (int y2 = startY; y2 < (startY + imageScale); y2++)
+                    {
+                        for (int x2 = startX; x2 < (startX + imageScale); x2++)
+                        {
+                            newRawData[y2, x2] = rawData[y1, x1];
+                        }
+                    }
+
+                    startX += imageScale;
+                }
+
+                startX = 0;
+                startY += imageScale;
             }
 
-            return new(imageToResize, new(newX, newY));
+            return newRawData;
         }
 
         private void numZoom_ValueChanged(object sender, EventArgs e)
         {
-            imageScale = (double)numZoom.Value / 100;
-            DrawImage(image.GetRawData());
+            imageScale = (int)numZoom.Value;
+
+            DrawImage(ResizeImage());
         }
 
         private void btnSave_Click(object sender, EventArgs e)

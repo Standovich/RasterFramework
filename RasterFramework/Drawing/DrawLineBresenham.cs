@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace RasterFramework.LowLevel
 {
-    internal class DrawLineBresenham : ILowLevelLine
+    internal class DrawLineBresenham : IDrawLine
     {
         Color colorToDraw = Color.FromArgb(0, 0, 255);
         public void Apply(Core.Image image, Point p0, Point p1)

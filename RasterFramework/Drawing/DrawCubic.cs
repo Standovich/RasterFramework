@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace RasterFramework.LowLevel
 {
-    internal class DrawCubic : ILowLevelCurve
+    internal class DrawCubic : IDrawCurve
     {
-        private ILowLevelLine drawLine = new DrawLineDDA();
+        private IDrawLine drawLine = new DrawLineDDA();
         public void Apply(Core.Image image, Point[] points)
         {
             double d = 0.01;

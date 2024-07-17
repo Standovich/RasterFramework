@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace RasterFramework.Core
 {
-    internal interface ILowLevelCurve
+    internal interface IDrawLine
     {
-        void Apply(Image image, Point[] points);
+        void Apply(Image image, Point p0, Point p1);
     }
 }
