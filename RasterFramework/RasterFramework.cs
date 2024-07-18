@@ -79,6 +79,14 @@ namespace RasterFramework
             //image = convolution.Apply(image, kernel);
         }
 
+        private void DrawLine(Type type, Point p0, Point p1)
+        {
+            Assembly assem = typeof(IDrawLine).Assembly;
+            line = (IDrawLine) assem.CreateInstance(type.FullName.ToString());
+
+            line.Apply(image, p0, p1);
+        }
+
         private void imgSelectBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             switch (imgSelectBox.SelectedIndex)
@@ -221,18 +229,30 @@ namespace RasterFramework
 
         private void btnAddLIne_Click(object sender, EventArgs e)
         {
-            AddLineForm addLineForm = new(drawLineClasses);
+            AddLineForm addLineForm = new(drawLineClasses, 
+                new(image.GetWidth(), image.GetHeight()));
             var addLine = addLineForm.ShowDialog();
 
             if(addLine == DialogResult.OK)
             {
-
+                DrawLine(
+                    addLineForm.SelectedAlgorithm,
+                    addLineForm.PointA,
+                    addLineForm.PointB);
+                DrawImage(image.GetRawData());
             }
         }
 
         private void btnAddCurve_Click(object sender, EventArgs e)
         {
+            AddCurveForm addCurveForm = new(drawLineClasses,
+                new(image.GetWidth(), image.GetHeight()));
+            var addCurve = addCurveForm.ShowDialog();
 
+            if (addCurve == DialogResult.OK)
+            {
+                
+            }
         }
     }
 }

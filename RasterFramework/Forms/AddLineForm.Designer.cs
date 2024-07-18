@@ -57,6 +57,7 @@
             btnOK.TabIndex = 0;
             btnOK.Text = "Potvrdit";
             btnOK.UseVisualStyleBackColor = true;
+            btnOK.Click += btnOK_Click;
             // 
             // btnCancel
             // 
@@ -75,6 +76,7 @@
             lineSelectBox.Name = "lineSelectBox";
             lineSelectBox.Size = new Size(121, 23);
             lineSelectBox.TabIndex = 2;
+            lineSelectBox.SelectedIndexChanged += lineSelectBox_SelectedIndexChanged;
             // 
             // lblLineMethod
             // 
@@ -157,7 +159,7 @@
             // 
             lblPointA.AutoSize = true;
             lblPointA.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point);
-            lblPointA.Location = new Point(12, 69);
+            lblPointA.Location = new Point(12, 66);
             lblPointA.Name = "lblPointA";
             lblPointA.Size = new Size(49, 17);
             lblPointA.TabIndex = 12;
@@ -167,7 +169,7 @@
             // 
             lblPointB.AutoSize = true;
             lblPointB.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point);
-            lblPointB.Location = new Point(112, 69);
+            lblPointB.Location = new Point(112, 66);
             lblPointB.Name = "lblPointB";
             lblPointB.Size = new Size(48, 17);
             lblPointB.TabIndex = 13;
@@ -192,8 +194,9 @@
             Controls.Add(lineSelectBox);
             Controls.Add(btnCancel);
             Controls.Add(btnOK);
+            MinimumSize = new Size(221, 228);
             Name = "AddLineForm";
-            Text = "Přidat úsečku";
+            Text = "Úsečku";
             Load += AddLineForm_Load;
             ((System.ComponentModel.ISupportInitialize)numLineY1).EndInit();
             ((System.ComponentModel.ISupportInitialize)numLineY2).EndInit();
