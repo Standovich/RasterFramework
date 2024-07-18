@@ -9,5 +9,6 @@ namespace RasterFramework.Core
     internal interface IConvolution
     {
         Image Apply(Image sourceImage, double[,] kernel);
+        string GetName();
     }
 }

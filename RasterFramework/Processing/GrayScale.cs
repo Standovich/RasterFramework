@@ -39,5 +39,10 @@ namespace RasterFramework.Processing
             int b = color.B;
             return (r * 0.299) + (g * 0.587) + (b * 0.114);
         }
+
+        public string GetName()
+        {
+            return "Šedá škála";
+        }
     }
 }

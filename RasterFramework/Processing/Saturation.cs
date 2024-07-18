@@ -39,5 +39,10 @@ namespace RasterFramework.Processing
             newImage.SetRawData(newRawData);
             return newImage;
         }
+
+        public string GetName()
+        {
+            return "Saturace";
+        }
     }
 }

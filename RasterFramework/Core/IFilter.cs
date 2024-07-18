@@ -9,5 +9,6 @@ namespace RasterFramework.Core
     internal interface IFilter
     {
         Image Apply(Image sourceImage);
+        string GetName();
     }
 }

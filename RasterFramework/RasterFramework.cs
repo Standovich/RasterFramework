@@ -1,6 +1,9 @@
 using RasterFramework.Core;
+using RasterFramework.Forms;
 using RasterFramework.LowLevel;
 using RasterFramework.Processing;
+using System.Collections.Generic;
+using System.Reflection;
 
 namespace RasterFramework
 {
@@ -13,8 +16,13 @@ namespace RasterFramework
         private IFilter filter;
         private IConvolution convolution;
 
+        private IEnumerable<Type> drawLineClasses;
+        private IEnumerable<Type> drawCurveClasses;
+        private IEnumerable<Type> drawFillClasses;
+        private IEnumerable<Type> filterClasses;
+        private IEnumerable<Type> convolutionClasses;
+
         private int imageScale = 1;
-        private int prevImageScale = 1;
 
         public RasterFramework()
         {
@@ -24,8 +32,33 @@ namespace RasterFramework
         private void Form1_Load(object sender, EventArgs e)
         {
             image = new(imageBox.Width, imageBox.Height);
+            canvasSelectBox.SelectedIndex = 0;
+            LoadClassLists();
             Processing();
             DrawImage(image.GetRawData());
+        }
+
+        private void LoadClassLists()
+        {
+            drawLineClasses = AppDomain.CurrentDomain.GetAssemblies()
+                .SelectMany(s => s.GetTypes())
+                .Where(p => typeof(IDrawLine).IsAssignableFrom(p) && p.IsClass);
+
+            drawCurveClasses = AppDomain.CurrentDomain.GetAssemblies()
+                .SelectMany(s => s.GetTypes())
+                .Where(p => typeof(IDrawCurve).IsAssignableFrom(p) && p.IsClass);
+
+            drawFillClasses = AppDomain.CurrentDomain.GetAssemblies()
+                .SelectMany(s => s.GetTypes())
+                .Where(p => typeof(IDrawFill).IsAssignableFrom(p) && p.IsClass);
+
+            filterClasses = AppDomain.CurrentDomain.GetAssemblies()
+                .SelectMany(s => s.GetTypes())
+                .Where(p => typeof(IFilter).IsAssignableFrom(p) && p.IsClass);
+
+            convolutionClasses = AppDomain.CurrentDomain.GetAssemblies()
+                .SelectMany(s => s.GetTypes())
+                .Where(p => typeof(IConvolution).IsAssignableFrom(p) && p.IsClass);
         }
 
         private void Processing()
@@ -113,11 +146,12 @@ namespace RasterFramework
             {
                 for (int x1 = 0; x1 < width; x1++)
                 {
+                    Color colorToCopy = rawData[y1, x1];
                     for (int y2 = startY; y2 < (startY + imageScale); y2++)
                     {
                         for (int x2 = startX; x2 < (startX + imageScale); x2++)
                         {
-                            newRawData[y2, x2] = rawData[y1, x1];
+                            newRawData[y2, x2] = colorToCopy;
                         }
                     }
 
@@ -134,7 +168,6 @@ namespace RasterFramework
         private void numZoom_ValueChanged(object sender, EventArgs e)
         {
             imageScale = (int)numZoom.Value;
-
             DrawImage(ResizeImage());
         }
 
@@ -157,6 +190,49 @@ namespace RasterFramework
         {
             RasterFramework newInstance = new();
             newInstance.Show();
+        }
+
+        private void canvasSelectBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            switch (canvasSelectBox.SelectedIndex)
+            {
+                case 0:
+                    imageBox.Size = new(400, 400);
+                    imagePanel.Size = new(403, 403);
+                    this.MinimumSize = new(580, 565);
+
+                    lblCanvasSize.Location = new(12, 475);
+                    canvasSelectBox.Location = new(9, 493);
+
+                    btnNewInstance.Location = new(159, 493);
+                    break;
+                case 1:
+                    if (this.Width < 1460 || this.Height < 880) this.Size = new(1460, 885);
+                    this.MinimumSize = new(1460, 885);
+                    imageBox.Size = new(1280, 720);
+                    imagePanel.Size = new(1283, 723);
+
+                    lblCanvasSize.Location = new(12, 795);
+                    canvasSelectBox.Location = new(9, 813);
+                    btnNewInstance.Location = new(159, 813);
+                    break;
+            }
+        }
+
+        private void btnAddLIne_Click(object sender, EventArgs e)
+        {
+            AddLineForm addLineForm = new(drawLineClasses);
+            var addLine = addLineForm.ShowDialog();
+
+            if(addLine == DialogResult.OK)
+            {
+
+            }
+        }
+
+        private void btnAddCurve_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

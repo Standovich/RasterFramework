@@ -9,5 +9,6 @@ namespace RasterFramework.Core
     internal interface IDrawCurve
     {
         void Apply(Image image, Point[] points);
+        string GetName();
     }
 }

@@ -9,5 +9,6 @@ namespace RasterFramework.Core
     internal interface IDrawLine
     {
         void Apply(Image image, Point p0, Point p1);
+        string GetName();
     }
 }

@@ -31,5 +31,10 @@ namespace RasterFramework.LowLevel
                 y1 = (int)y2;
             }
         }
+
+        public string GetName()
+        {
+            return "Kubická";
+        }
     }
 }

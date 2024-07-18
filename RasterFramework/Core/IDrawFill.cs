@@ -9,5 +9,6 @@ namespace RasterFramework.Core
     internal interface IDrawFill
     {
         void Apply(Image image);
+        string GetName();
     }
 }

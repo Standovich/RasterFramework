@@ -36,6 +36,14 @@
             imagePanel = new Panel();
             imageBox = new PictureBox();
             btnNewInstance = new Button();
+            canvasSelectBox = new ComboBox();
+            lblCanvasSize = new Label();
+            btnAddLIne = new Button();
+            lblLine = new Label();
+            lblCurve = new Label();
+            btnAddCurve = new Button();
+            fillSelectBox = new ComboBox();
+            fillCheckBox = new CheckBox();
             ((System.ComponentModel.ISupportInitialize)numZoom).BeginInit();
             imagePanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)imageBox).BeginInit();
@@ -43,7 +51,7 @@
             // 
             // btnSave
             // 
-            btnSave.Location = new Point(337, 38);
+            btnSave.Location = new Point(231, 36);
             btnSave.Name = "btnSave";
             btnSave.Size = new Size(75, 23);
             btnSave.TabIndex = 2;
@@ -55,7 +63,7 @@
             // 
             imgSelectBox.FormattingEnabled = true;
             imgSelectBox.Items.AddRange(new object[] { "Obrázek1", "Obrázek2", "Obrázek3", "Vlastní obrázek" });
-            imgSelectBox.Location = new Point(12, 38);
+            imgSelectBox.Location = new Point(9, 38);
             imgSelectBox.Name = "imgSelectBox";
             imgSelectBox.Size = new Size(121, 23);
             imgSelectBox.TabIndex = 3;
@@ -64,7 +72,7 @@
             // lblOpenImg
             // 
             lblOpenImg.AutoSize = true;
-            lblOpenImg.Location = new Point(12, 20);
+            lblOpenImg.Location = new Point(9, 20);
             lblOpenImg.Name = "lblOpenImg";
             lblOpenImg.Size = new Size(88, 15);
             lblOpenImg.TabIndex = 4;
@@ -94,7 +102,7 @@
             // 
             imagePanel.AutoScroll = true;
             imagePanel.Controls.Add(imageBox);
-            imagePanel.Location = new Point(9, 67);
+            imagePanel.Location = new Point(147, 67);
             imagePanel.Name = "imagePanel";
             imagePanel.Size = new Size(403, 403);
             imagePanel.TabIndex = 7;
@@ -111,7 +119,7 @@
             // 
             // btnNewInstance
             // 
-            btnNewInstance.Location = new Point(254, 38);
+            btnNewInstance.Location = new Point(159, 493);
             btnNewInstance.Name = "btnNewInstance";
             btnNewInstance.Size = new Size(77, 23);
             btnNewInstance.TabIndex = 8;
@@ -119,11 +127,94 @@
             btnNewInstance.UseVisualStyleBackColor = true;
             btnNewInstance.Click += btnNewInstance_Click;
             // 
+            // canvasSelectBox
+            // 
+            canvasSelectBox.FormattingEnabled = true;
+            canvasSelectBox.Items.AddRange(new object[] { "400x400", "1280x720" });
+            canvasSelectBox.Location = new Point(9, 493);
+            canvasSelectBox.Name = "canvasSelectBox";
+            canvasSelectBox.Size = new Size(121, 23);
+            canvasSelectBox.TabIndex = 9;
+            canvasSelectBox.SelectedIndexChanged += canvasSelectBox_SelectedIndexChanged;
+            // 
+            // lblCanvasSize
+            // 
+            lblCanvasSize.AutoSize = true;
+            lblCanvasSize.Location = new Point(12, 475);
+            lblCanvasSize.Name = "lblCanvasSize";
+            lblCanvasSize.Size = new Size(110, 15);
+            lblCanvasSize.TabIndex = 10;
+            lblCanvasSize.Text = "Velikost plátna (px):";
+            // 
+            // btnAddLIne
+            // 
+            btnAddLIne.Location = new Point(9, 105);
+            btnAddLIne.Name = "btnAddLIne";
+            btnAddLIne.Size = new Size(75, 23);
+            btnAddLIne.TabIndex = 11;
+            btnAddLIne.Text = "Přidat";
+            btnAddLIne.UseVisualStyleBackColor = true;
+            btnAddLIne.Click += btnAddLIne_Click;
+            // 
+            // lblLine
+            // 
+            lblLine.AutoSize = true;
+            lblLine.Location = new Point(9, 87);
+            lblLine.Name = "lblLine";
+            lblLine.Size = new Size(47, 15);
+            lblLine.TabIndex = 12;
+            lblLine.Text = "Úsečky:";
+            // 
+            // lblCurve
+            // 
+            lblCurve.AutoSize = true;
+            lblCurve.Location = new Point(9, 140);
+            lblCurve.Name = "lblCurve";
+            lblCurve.Size = new Size(42, 15);
+            lblCurve.TabIndex = 13;
+            lblCurve.Text = "Křivky:";
+            // 
+            // btnAddCurve
+            // 
+            btnAddCurve.Location = new Point(9, 158);
+            btnAddCurve.Name = "btnAddCurve";
+            btnAddCurve.Size = new Size(75, 23);
+            btnAddCurve.TabIndex = 14;
+            btnAddCurve.Text = "Přidat";
+            btnAddCurve.UseVisualStyleBackColor = true;
+            btnAddCurve.Click += btnAddCurve_Click;
+            // 
+            // fillSelectBox
+            // 
+            fillSelectBox.FormattingEnabled = true;
+            fillSelectBox.Location = new Point(9, 222);
+            fillSelectBox.Name = "fillSelectBox";
+            fillSelectBox.Size = new Size(96, 23);
+            fillSelectBox.TabIndex = 16;
+            // 
+            // fillCheckBox
+            // 
+            fillCheckBox.AutoSize = true;
+            fillCheckBox.Location = new Point(9, 197);
+            fillCheckBox.Name = "fillCheckBox";
+            fillCheckBox.Size = new Size(59, 19);
+            fillCheckBox.TabIndex = 17;
+            fillCheckBox.Text = "Výplň:";
+            fillCheckBox.UseVisualStyleBackColor = true;
+            // 
             // RasterFramework
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(424, 486);
+            ClientSize = new Size(564, 526);
+            Controls.Add(fillCheckBox);
+            Controls.Add(fillSelectBox);
+            Controls.Add(btnAddCurve);
+            Controls.Add(lblCurve);
+            Controls.Add(lblLine);
+            Controls.Add(btnAddLIne);
+            Controls.Add(lblCanvasSize);
+            Controls.Add(canvasSelectBox);
             Controls.Add(btnNewInstance);
             Controls.Add(imagePanel);
             Controls.Add(lblScale);
@@ -131,7 +222,7 @@
             Controls.Add(lblOpenImg);
             Controls.Add(imgSelectBox);
             Controls.Add(btnSave);
-            MinimumSize = new Size(440, 525);
+            MinimumSize = new Size(440, 565);
             Name = "RasterFramework";
             Text = "RasterFramework";
             Load += Form1_Load;
@@ -152,5 +243,13 @@
         private Panel imagePanel;
         private PictureBox imageBox;
         private Button btnNewInstance;
+        private ComboBox canvasSelectBox;
+        private Label lblCanvasSize;
+        private Button btnAddLIne;
+        private Label lblLine;
+        private Label lblCurve;
+        private Button btnAddCurve;
+        private ComboBox fillSelectBox;
+        private CheckBox fillCheckBox;
     }
 }

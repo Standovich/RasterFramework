@@ -61,5 +61,10 @@ namespace RasterFramework.Processing
 
             return newImage;
         }
+
+        public string GetName()
+        {
+            return "Detekce hran";
+        }
     }
 }

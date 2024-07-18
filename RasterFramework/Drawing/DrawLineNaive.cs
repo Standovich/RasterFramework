@@ -29,5 +29,10 @@ namespace RasterFramework.LowLevel
                 rawData[y, x] = colorToDraw;
             }
         }
+
+        public string GetName()
+        {
+            return "Naive";
+        }
     }
 }

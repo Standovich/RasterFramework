@@ -31,5 +31,10 @@ namespace RasterFramework.LowLevel
                 y += incrementY;
             }
         }
+
+        public string GetName()
+        {
+            return "DDA";
+        }
     }
 }

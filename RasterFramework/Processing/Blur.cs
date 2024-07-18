@@ -64,5 +64,10 @@ namespace RasterFramework.Processing
 
             return newImage;
         }
+
+        public string GetName()
+        {
+            return "Rozmazání";
+        }
     }
 }
