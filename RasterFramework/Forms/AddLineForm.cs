@@ -13,7 +13,7 @@ namespace RasterFramework.Forms
 {
     public partial class AddLineForm : Form
     {
-        private List<String> listOfAlgorithms;
+        private List<string> listOfAlgorithms;
         private IEnumerable<Type> listOfClasses;
         private Size maxSize;
 
@@ -31,7 +31,7 @@ namespace RasterFramework.Forms
         private void InitLists(IEnumerable<Type> listOfTypes)
         {
             listOfClasses = listOfTypes;
-            listOfAlgorithms = new List<String>();
+            listOfAlgorithms = new List<string>();
 
             foreach (Type type in listOfTypes)
             {

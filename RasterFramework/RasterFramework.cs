@@ -10,6 +10,11 @@ namespace RasterFramework
     public partial class RasterFramework : Form
     {
         private Core.Image image;
+        private Core.Image filledImage;
+
+        private bool fillActive;
+        private bool imageLoaded = false;
+
         private IDrawLine line;
         private IDrawCurve curve;
         private IDrawFill fill;
@@ -22,6 +27,11 @@ namespace RasterFramework
         private IEnumerable<Type> filterClasses;
         private IEnumerable<Type> convolutionClasses;
 
+        private List<string> listOfFillAlgorithms;
+        private Type SelectedFillAlgorithm;
+        private List<string> listOfFilterAlgorithms;
+        private Type SelectedFilterAlgorithm;
+
         private int imageScale = 1;
 
         public RasterFramework()
@@ -29,12 +39,14 @@ namespace RasterFramework
             InitializeComponent();
         }
 
+        //Inicializaèní metody
         private void Form1_Load(object sender, EventArgs e)
         {
             image = new(imageBox.Width, imageBox.Height);
+            fillActive = false;
             canvasSelectBox.SelectedIndex = 0;
             LoadClassLists();
-            Processing();
+            InitUI();
             DrawImage(image.GetRawData());
         }
 
@@ -61,63 +73,99 @@ namespace RasterFramework
                 .Where(p => typeof(IConvolution).IsAssignableFrom(p) && p.IsClass);
         }
 
-        private void Processing()
+        private void InitUI()
         {
-            //line = new DrawLineNaive();
-            //line.Apply(image, new Point(50, 75), new Point(250, 300));
-
-            //Point[] points = { new(50, 300), new(75, 150), new(250, 300), new(350, 100) };
-            //curve = new DrawCubic();
-            //curve.Apply(image, points);
-
-            //filter = new GrayScale();
-            //image = filter.Apply(image);
-
-            //double[,] kernel = GenerateKernel.GetKernel(ConvolutionType.GaussBlur3x3);
-
-            //convolution = new Blur();
-            //image = convolution.Apply(image, kernel);
+            InitFillUI();
+            InitFilterUI();
         }
 
+        private void InitFillUI()
+        {
+            if (drawFillClasses.Count() > 0)
+            {
+                listOfFillAlgorithms = new List<string>();
+
+                foreach (Type type in drawFillClasses)
+                {
+                    object lineClass = Activator.CreateInstance(type);
+                    MethodInfo methodInfo = type.GetMethod("GetName");
+                    var result = methodInfo.Invoke(lineClass, null);
+
+                    listOfFillAlgorithms.Add((string)result);
+                }
+
+                foreach (string name in listOfFillAlgorithms)
+                {
+                    fillSelectBox.Items.Add(name);
+                }
+
+                SelectedFillAlgorithm = drawFillClasses.First();
+                fillSelectBox.SelectedIndex = 0;
+            }
+        }
+
+        private void InitFilterUI()
+        {
+            if (filterClasses.Count() > 0)
+            {
+                listOfFilterAlgorithms = new List<string>();
+
+                foreach (Type type in filterClasses)
+                {
+                    object lineClass = Activator.CreateInstance(type);
+                    MethodInfo methodInfo = type.GetMethod("GetName");
+                    var result = methodInfo.Invoke(lineClass, null);
+
+                    listOfFilterAlgorithms.Add((string)result);
+                }
+
+                foreach (string name in listOfFilterAlgorithms)
+                {
+                    filterSelectBox.Items.Add(name);
+                }
+
+                SelectedFilterAlgorithm = filterClasses.First();
+                filterSelectBox.SelectedIndex = 0;
+            }
+            else btnApplyFilter.Enabled = false;
+        }
+
+        //Volání vybraných metod ze studentské èásti
         private void DrawLine(Type type, Point p0, Point p1)
         {
             Assembly assem = typeof(IDrawLine).Assembly;
-            line = (IDrawLine) assem.CreateInstance(type.FullName.ToString());
+            line = (IDrawLine)assem.CreateInstance(type.FullName.ToString());
 
             line.Apply(image, p0, p1);
         }
 
-        private void imgSelectBox_SelectedIndexChanged(object sender, EventArgs e)
+        private void DrawCurve(Type type, Point[] points)
         {
-            switch (imgSelectBox.SelectedIndex)
-            {
-                case 0:
-                    image = Core.Image.LoadFromFile(@"../../../Images/1.png");
-                    break;
-                case 1:
-                    image = Core.Image.LoadFromFile(@"../../../Images/2.png");
-                    break;
-                case 2:
-                    image = Core.Image.LoadFromFile(@"../../../Images/3.png");
-                    break;
-                case 3:
-                    OpenFileDialog frmOpenImg = new OpenFileDialog()
-                    {
-                        Title = "Otevøít obrázek"
-                    };
-                    var open = frmOpenImg.ShowDialog();
-                    if (open == DialogResult.OK)
-                    {
-                        image = Core.Image.LoadFromFile(frmOpenImg.FileName);
-                        imageScale = 1;
-                    }
-                    break;
-            }
+            Assembly assem = typeof(IDrawCurve).Assembly;
+            curve = (IDrawCurve)assem.CreateInstance(type.FullName.ToString());
 
-            Processing();
-            DrawImage(image.GetRawData());
+            curve.Apply(image, points);
         }
 
+        private void DrawFill(Type type)
+        {
+            filledImage = new(image.GetRawData());
+
+            Assembly assem = typeof(IDrawFill).Assembly;
+            fill = (IDrawFill)assem.CreateInstance(type.FullName.ToString());
+
+            fill.Apply(filledImage);
+        }
+
+        private void ApplyFilter(Type type)
+        {
+            Assembly assem = typeof(IFilter).Assembly;
+            filter = (IFilter)assem.CreateInstance(type.FullName.ToString());
+
+            image = filter.Apply(image);
+        }
+
+        //Škálování a vykreslování obrazu
         private void DrawImage(Color[,] rawData)
         {
             int width = rawData.GetLength(1);
@@ -173,10 +221,103 @@ namespace RasterFramework
             return newRawData;
         }
 
-        private void numZoom_ValueChanged(object sender, EventArgs e)
+        private void RedrawCanvas(Size newSize)
         {
-            imageScale = (int)numZoom.Value;
-            DrawImage(ResizeImage());
+            if (newSize.Width > image.GetWidth())
+            {
+                Color[,] newRawData = ScaleUp(newSize);
+                image = new(newRawData);
+                DrawImage(newRawData);
+            }
+            if (newSize.Width < image.GetWidth())
+            {
+                Color[,] newRawData = ScaleDown(newSize);
+                image = new(newRawData);
+                DrawImage(newRawData);
+            }
+        }
+
+        private Color[,] ScaleUp(Size newSize)
+        {
+            Color[,] currentRawData = image.GetRawData();
+            Color[,] newRawData = new Color[newSize.Height, newSize.Width];
+
+            int currentWidth = image.GetWidth();
+            int currentHeight = image.GetHeight();
+
+            for (int y = 0; y < currentHeight; y++)
+            {
+                for (int x = 0; x < currentWidth; x++)
+                {
+                    newRawData[y, x] = currentRawData[y, x];
+                }
+            }
+
+            for (int y = 0; y < currentHeight; y++)
+            {
+                for (int x = currentWidth; x < newSize.Width; x++)
+                {
+                    newRawData[y, x] = Color.FromArgb(0, 0, 0);
+                }
+            }
+
+            for (int y = currentHeight; y < newSize.Height; y++)
+            {
+                for (int x = 0; x < newSize.Width; x++)
+                {
+                    newRawData[y, x] = Color.FromArgb(0, 0, 0);
+                }
+            }
+
+            return newRawData;
+        }
+
+        private Color[,] ScaleDown(Size newSize)
+        {
+            Color[,] currentRawData = image.GetRawData();
+            Color[,] newRawData = new Color[newSize.Height, newSize.Width];
+
+            for (int y = 0; y < newSize.Height; y++)
+            {
+                for (int x = 0; x < newSize.Width; x++)
+                {
+                    newRawData[y, x] = currentRawData[y, x];
+                }
+            }
+
+            return newRawData;
+        }
+
+        //Metody uživatelského rozhraní
+        private void imgSelectBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            switch (imgSelectBox.SelectedIndex)
+            {
+                case 0:
+                    image = Core.Image.LoadFromFile(@"../../../Images/1.png");
+                    break;
+                case 1:
+                    image = Core.Image.LoadFromFile(@"../../../Images/2.png");
+                    break;
+                case 2:
+                    image = Core.Image.LoadFromFile(@"../../../Images/3.png");
+                    break;
+                case 3:
+                    OpenFileDialog frmOpenImg = new OpenFileDialog()
+                    {
+                        Title = "Otevøít obrázek"
+                    };
+                    var open = frmOpenImg.ShowDialog();
+                    if (open == DialogResult.OK)
+                    {
+                        image = Core.Image.LoadFromFile(frmOpenImg.FileName);
+                        imageScale = 1;
+                    }
+                    break;
+            }
+
+            imageLoaded = true;
+            DrawImage(image.GetRawData());
         }
 
         private void btnSave_Click(object sender, EventArgs e)
@@ -194,6 +335,12 @@ namespace RasterFramework
             }
         }
 
+        private void numZoom_ValueChanged(object sender, EventArgs e)
+        {
+            imageScale = (int)numZoom.Value;
+            DrawImage(ResizeImage());
+        }
+
         private void btnNewInstance_Click(object sender, EventArgs e)
         {
             RasterFramework newInstance = new();
@@ -202,9 +349,12 @@ namespace RasterFramework
 
         private void canvasSelectBox_SelectedIndexChanged(object sender, EventArgs e)
         {
+            Size newSize = new();
+
             switch (canvasSelectBox.SelectedIndex)
             {
                 case 0:
+                    newSize = new Size(400, 400);
                     imageBox.Size = new(400, 400);
                     imagePanel.Size = new(403, 403);
                     this.MinimumSize = new(580, 565);
@@ -215,6 +365,7 @@ namespace RasterFramework
                     btnNewInstance.Location = new(159, 493);
                     break;
                 case 1:
+                    newSize = new Size(1280, 720);
                     if (this.Width < 1460 || this.Height < 880) this.Size = new(1460, 885);
                     this.MinimumSize = new(1460, 885);
                     imageBox.Size = new(1280, 720);
@@ -225,15 +376,17 @@ namespace RasterFramework
                     btnNewInstance.Location = new(159, 813);
                     break;
             }
+
+            if (!imageLoaded) RedrawCanvas(newSize);
         }
 
         private void btnAddLIne_Click(object sender, EventArgs e)
         {
-            AddLineForm addLineForm = new(drawLineClasses, 
+            AddLineForm addLineForm = new(drawLineClasses,
                 new(image.GetWidth(), image.GetHeight()));
             var addLine = addLineForm.ShowDialog();
 
-            if(addLine == DialogResult.OK)
+            if (addLine == DialogResult.OK)
             {
                 DrawLine(
                     addLineForm.SelectedAlgorithm,
@@ -245,13 +398,80 @@ namespace RasterFramework
 
         private void btnAddCurve_Click(object sender, EventArgs e)
         {
-            AddCurveForm addCurveForm = new(drawLineClasses,
+            AddCurveForm addCurveForm = new(drawCurveClasses,
                 new(image.GetWidth(), image.GetHeight()));
             var addCurve = addCurveForm.ShowDialog();
 
             if (addCurve == DialogResult.OK)
             {
-                
+                DrawCurve(
+                    addCurveForm.SelectedAlgorithm,
+                    addCurveForm.Points.ToArray());
+                DrawImage(image.GetRawData());
+            }
+        }
+
+        private void fillCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            if (drawFillClasses.Count() > 0)
+            {
+                fillActive = fillCheckBox.Checked;
+                if (fillActive)
+                {
+                    DrawFill(SelectedFillAlgorithm);
+                    DrawImage(filledImage.GetRawData());
+                }
+                else DrawImage(image.GetRawData());
+            }
+            else fillCheckBox.CheckState = CheckState.Unchecked;
+        }
+
+        private void fillSelectBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            foreach (Type type in drawFillClasses)
+            {
+                object lineClass = Activator.CreateInstance(type);
+                MethodInfo methodInfo = type.GetMethod("GetName");
+                var result = methodInfo.Invoke(lineClass, null);
+
+                if ((string)result == fillSelectBox.SelectedItem.ToString())
+                {
+                    SelectedFillAlgorithm = type;
+                    break;
+                }
+            }
+        }
+
+        private void btnApplyFilter_Click(object sender, EventArgs e)
+        {
+            ApplyFilter(SelectedFilterAlgorithm);
+            DrawImage(image.GetRawData());
+        }
+
+        private void filterSelectBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            foreach (Type type in filterClasses)
+            {
+                object lineClass = Activator.CreateInstance(type);
+                MethodInfo methodInfo = type.GetMethod("GetName");
+                var result = methodInfo.Invoke(lineClass, null);
+
+                if ((string)result == filterSelectBox.SelectedItem.ToString())
+                {
+                    SelectedFilterAlgorithm = type;
+                    break;
+                }
+            }
+        }
+
+        private void btnAddConvolution_Click(object sender, EventArgs e)
+        {
+            ApplyConvolutionForm applyConvolutionForm = new(convolutionClasses);
+            var applyConvolution = applyConvolutionForm.ShowDialog();
+
+            if (applyConvolution == DialogResult.OK)
+            {
+
             }
         }
     }

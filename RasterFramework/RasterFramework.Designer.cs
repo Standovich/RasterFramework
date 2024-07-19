@@ -44,6 +44,13 @@
             btnAddCurve = new Button();
             fillSelectBox = new ComboBox();
             fillCheckBox = new CheckBox();
+            lblFilter = new Label();
+            lblDrawing = new Label();
+            lblPostProcessing = new Label();
+            filterSelectBox = new ComboBox();
+            btnApplyFilter = new Button();
+            lblConvolution = new Label();
+            btnAddConvolution = new Button();
             ((System.ComponentModel.ISupportInitialize)numZoom).BeginInit();
             imagePanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)imageBox).BeginInit();
@@ -148,7 +155,7 @@
             // 
             // btnAddLIne
             // 
-            btnAddLIne.Location = new Point(9, 105);
+            btnAddLIne.Location = new Point(9, 118);
             btnAddLIne.Name = "btnAddLIne";
             btnAddLIne.Size = new Size(75, 23);
             btnAddLIne.TabIndex = 11;
@@ -159,7 +166,7 @@
             // lblLine
             // 
             lblLine.AutoSize = true;
-            lblLine.Location = new Point(9, 87);
+            lblLine.Location = new Point(9, 100);
             lblLine.Name = "lblLine";
             lblLine.Size = new Size(47, 15);
             lblLine.TabIndex = 12;
@@ -168,7 +175,7 @@
             // lblCurve
             // 
             lblCurve.AutoSize = true;
-            lblCurve.Location = new Point(9, 140);
+            lblCurve.Location = new Point(9, 153);
             lblCurve.Name = "lblCurve";
             lblCurve.Size = new Size(42, 15);
             lblCurve.TabIndex = 13;
@@ -176,7 +183,7 @@
             // 
             // btnAddCurve
             // 
-            btnAddCurve.Location = new Point(9, 158);
+            btnAddCurve.Location = new Point(9, 171);
             btnAddCurve.Name = "btnAddCurve";
             btnAddCurve.Size = new Size(75, 23);
             btnAddCurve.TabIndex = 14;
@@ -187,26 +194,102 @@
             // fillSelectBox
             // 
             fillSelectBox.FormattingEnabled = true;
-            fillSelectBox.Location = new Point(9, 222);
+            fillSelectBox.Location = new Point(9, 235);
             fillSelectBox.Name = "fillSelectBox";
             fillSelectBox.Size = new Size(96, 23);
             fillSelectBox.TabIndex = 16;
+            fillSelectBox.SelectedIndexChanged += fillSelectBox_SelectedIndexChanged;
             // 
             // fillCheckBox
             // 
             fillCheckBox.AutoSize = true;
-            fillCheckBox.Location = new Point(9, 197);
+            fillCheckBox.Location = new Point(9, 210);
             fillCheckBox.Name = "fillCheckBox";
             fillCheckBox.Size = new Size(59, 19);
             fillCheckBox.TabIndex = 17;
             fillCheckBox.Text = "Výplň:";
             fillCheckBox.UseVisualStyleBackColor = true;
+            fillCheckBox.CheckedChanged += fillCheckBox_CheckedChanged;
+            // 
+            // lblFilter
+            // 
+            lblFilter.AutoSize = true;
+            lblFilter.Location = new Point(12, 295);
+            lblFilter.Name = "lblFilter";
+            lblFilter.Size = new Size(30, 15);
+            lblFilter.TabIndex = 18;
+            lblFilter.Text = "Filtr:";
+            // 
+            // lblDrawing
+            // 
+            lblDrawing.AutoSize = true;
+            lblDrawing.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point);
+            lblDrawing.Location = new Point(9, 80);
+            lblDrawing.Name = "lblDrawing";
+            lblDrawing.Size = new Size(81, 15);
+            lblDrawing.TabIndex = 19;
+            lblDrawing.Text = "Vykreslování:";
+            // 
+            // lblPostProcessing
+            // 
+            lblPostProcessing.AutoSize = true;
+            lblPostProcessing.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point);
+            lblPostProcessing.Location = new Point(9, 276);
+            lblPostProcessing.Name = "lblPostProcessing";
+            lblPostProcessing.Size = new Size(112, 15);
+            lblPostProcessing.TabIndex = 20;
+            lblPostProcessing.Text = "Zpracování obrazu:";
+            // 
+            // filterSelectBox
+            // 
+            filterSelectBox.FormattingEnabled = true;
+            filterSelectBox.Location = new Point(9, 313);
+            filterSelectBox.Name = "filterSelectBox";
+            filterSelectBox.Size = new Size(96, 23);
+            filterSelectBox.TabIndex = 21;
+            filterSelectBox.SelectedIndexChanged += filterSelectBox_SelectedIndexChanged;
+            // 
+            // btnApplyFilter
+            // 
+            btnApplyFilter.Location = new Point(9, 342);
+            btnApplyFilter.Name = "btnApplyFilter";
+            btnApplyFilter.Size = new Size(75, 23);
+            btnApplyFilter.TabIndex = 22;
+            btnApplyFilter.Text = "Aplikovat";
+            btnApplyFilter.UseVisualStyleBackColor = true;
+            btnApplyFilter.Click += btnApplyFilter_Click;
+            // 
+            // lblConvolution
+            // 
+            lblConvolution.AutoSize = true;
+            lblConvolution.Location = new Point(12, 378);
+            lblConvolution.Name = "lblConvolution";
+            lblConvolution.Size = new Size(66, 15);
+            lblConvolution.TabIndex = 23;
+            lblConvolution.Text = "Konvoluce:";
+            // 
+            // btnAddConvolution
+            // 
+            btnAddConvolution.Location = new Point(9, 396);
+            btnAddConvolution.Name = "btnAddConvolution";
+            btnAddConvolution.Size = new Size(75, 23);
+            btnAddConvolution.TabIndex = 24;
+            btnAddConvolution.Text = "Aplikovat";
+            btnAddConvolution.UseVisualStyleBackColor = true;
+            btnAddConvolution.Click += btnAddConvolution_Click;
             // 
             // RasterFramework
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(564, 526);
+            Controls.Add(btnAddConvolution);
+            Controls.Add(lblConvolution);
+            Controls.Add(btnApplyFilter);
+            Controls.Add(filterSelectBox);
+            Controls.Add(lblPostProcessing);
+            Controls.Add(lblDrawing);
+            Controls.Add(lblFilter);
             Controls.Add(fillCheckBox);
             Controls.Add(fillSelectBox);
             Controls.Add(btnAddCurve);
@@ -251,5 +334,12 @@
         private Button btnAddCurve;
         private ComboBox fillSelectBox;
         private CheckBox fillCheckBox;
+        private Label lblFilter;
+        private Label lblDrawing;
+        private Label lblPostProcessing;
+        private ComboBox filterSelectBox;
+        private Button btnApplyFilter;
+        private Label lblConvolution;
+        private Button btnAddConvolution;
     }
 }
