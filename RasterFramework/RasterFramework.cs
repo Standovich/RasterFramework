@@ -1,8 +1,5 @@
-using RasterFramework.Core;
 using RasterFramework.Forms;
-using RasterFramework.LowLevel;
-using RasterFramework.Processing;
-using System.Collections.Generic;
+using RasterFramework.Interfaces;
 using System.Reflection;
 
 namespace RasterFramework
@@ -47,7 +44,7 @@ namespace RasterFramework
             canvasSelectBox.SelectedIndex = 0;
             LoadClassLists();
             InitUI();
-            DrawImage(image.GetRawData());
+            DrawImage(image.RawData);
         }
 
         private void LoadClassLists()
@@ -149,7 +146,7 @@ namespace RasterFramework
 
         private void DrawFill(Type type)
         {
-            filledImage = new(image.GetRawData());
+            filledImage = new(image.RawData);
 
             Assembly assem = typeof(IDrawFill).Assembly;
             fill = (IDrawFill)assem.CreateInstance(type.FullName.ToString());
@@ -186,9 +183,9 @@ namespace RasterFramework
 
         private Color[,] ResizeImage()
         {
-            Color[,] rawData = image.GetRawData();
-            int height = image.GetHeight();
-            int width = image.GetWidth();
+            Color[,] rawData = image.RawData;
+            int height = image.Height;
+            int width = image.Width;
 
             int scale = imageScale;
 
@@ -223,13 +220,13 @@ namespace RasterFramework
 
         private void RedrawCanvas(Size newSize)
         {
-            if (newSize.Width > image.GetWidth())
+            if (newSize.Width > image.Width)
             {
                 Color[,] newRawData = ScaleUp(newSize);
                 image = new(newRawData);
                 DrawImage(newRawData);
             }
-            if (newSize.Width < image.GetWidth())
+            if (newSize.Width < image.Width)
             {
                 Color[,] newRawData = ScaleDown(newSize);
                 image = new(newRawData);
@@ -239,11 +236,11 @@ namespace RasterFramework
 
         private Color[,] ScaleUp(Size newSize)
         {
-            Color[,] currentRawData = image.GetRawData();
+            Color[,] currentRawData = image.RawData;
             Color[,] newRawData = new Color[newSize.Height, newSize.Width];
 
-            int currentWidth = image.GetWidth();
-            int currentHeight = image.GetHeight();
+            int currentWidth = image.Width;
+            int currentHeight = image.Height;
 
             for (int y = 0; y < currentHeight; y++)
             {
@@ -274,7 +271,7 @@ namespace RasterFramework
 
         private Color[,] ScaleDown(Size newSize)
         {
-            Color[,] currentRawData = image.GetRawData();
+            Color[,] currentRawData = image.RawData;
             Color[,] newRawData = new Color[newSize.Height, newSize.Width];
 
             for (int y = 0; y < newSize.Height; y++)
@@ -317,7 +314,7 @@ namespace RasterFramework
             }
 
             imageLoaded = true;
-            DrawImage(image.GetRawData());
+            DrawImage(image.RawData);
         }
 
         private void btnSave_Click(object sender, EventArgs e)
@@ -357,23 +354,14 @@ namespace RasterFramework
                     newSize = new Size(400, 400);
                     imageBox.Size = new(400, 400);
                     imagePanel.Size = new(403, 403);
-                    this.MinimumSize = new(580, 565);
-
-                    lblCanvasSize.Location = new(12, 475);
-                    canvasSelectBox.Location = new(9, 493);
-
-                    btnNewInstance.Location = new(159, 493);
+                    this.MinimumSize = new(580, 525);
                     break;
                 case 1:
                     newSize = new Size(1280, 720);
-                    if (this.Width < 1460 || this.Height < 880) this.Size = new(1460, 885);
-                    this.MinimumSize = new(1460, 885);
+                    if (this.Width < 1460 || this.Height < 830) this.Size = new(1460, 845);
+                    this.MinimumSize = new(1460, 845);
                     imageBox.Size = new(1280, 720);
                     imagePanel.Size = new(1283, 723);
-
-                    lblCanvasSize.Location = new(12, 795);
-                    canvasSelectBox.Location = new(9, 813);
-                    btnNewInstance.Location = new(159, 813);
                     break;
             }
 
@@ -383,7 +371,7 @@ namespace RasterFramework
         private void btnAddLIne_Click(object sender, EventArgs e)
         {
             AddLineForm addLineForm = new(drawLineClasses,
-                new(image.GetWidth(), image.GetHeight()));
+                new(image.Width, image.Height));
             var addLine = addLineForm.ShowDialog();
 
             if (addLine == DialogResult.OK)
@@ -392,14 +380,14 @@ namespace RasterFramework
                     addLineForm.SelectedAlgorithm,
                     addLineForm.PointA,
                     addLineForm.PointB);
-                DrawImage(image.GetRawData());
+                DrawImage(image.RawData);
             }
         }
 
         private void btnAddCurve_Click(object sender, EventArgs e)
         {
             AddCurveForm addCurveForm = new(drawCurveClasses,
-                new(image.GetWidth(), image.GetHeight()));
+                new(image.Width, image.Height));
             var addCurve = addCurveForm.ShowDialog();
 
             if (addCurve == DialogResult.OK)
@@ -407,7 +395,7 @@ namespace RasterFramework
                 DrawCurve(
                     addCurveForm.SelectedAlgorithm,
                     addCurveForm.Points.ToArray());
-                DrawImage(image.GetRawData());
+                DrawImage(image.RawData);
             }
         }
 
@@ -419,9 +407,9 @@ namespace RasterFramework
                 if (fillActive)
                 {
                     DrawFill(SelectedFillAlgorithm);
-                    DrawImage(filledImage.GetRawData());
+                    DrawImage(filledImage.RawData);
                 }
-                else DrawImage(image.GetRawData());
+                else DrawImage(image.RawData);
             }
             else fillCheckBox.CheckState = CheckState.Unchecked;
         }
@@ -445,7 +433,7 @@ namespace RasterFramework
         private void btnApplyFilter_Click(object sender, EventArgs e)
         {
             ApplyFilter(SelectedFilterAlgorithm);
-            DrawImage(image.GetRawData());
+            DrawImage(image.RawData);
         }
 
         private void filterSelectBox_SelectedIndexChanged(object sender, EventArgs e)

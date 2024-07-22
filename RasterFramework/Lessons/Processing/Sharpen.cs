@@ -1,19 +1,19 @@
-﻿using RasterFramework.Core;
+﻿using RasterFramework.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RasterFramework.Processing
+namespace RasterFramework.Lessons.Processing
 {
     internal class Sharpen : IConvolution
     {
         public Core.Image Apply(Core.Image sourceImage, double[,] kernel)
         {
-            int width = sourceImage.GetWidth();
-            int height = sourceImage.GetHeight();
-            Color[,] sourceRawData = sourceImage.GetRawData();
+            int width = sourceImage.Width;
+            int height = sourceImage.Height;
+            Color[,] sourceRawData = sourceImage.RawData;
             Color[,] newRawData = new Color[height, width];
 
             double[,] redData = new double[height, width];
@@ -45,9 +45,9 @@ namespace RasterFramework.Processing
             {
                 for (int x = 0; x < width; x++)
                 {
-                    if ((redData[y, x] > 255) || (redData[y, x] < 0)) redData[y, x] = sourceRawData[y, x].R;
-                    if ((greenData[y, x] > 255) || (greenData[y, x] < 0)) greenData[y, x] = sourceRawData[y, x].G;
-                    if ((blueData[y, x] > 255) || (blueData[y, x] < 0)) blueData[y, x] = sourceRawData[y, x].B;
+                    if (redData[y, x] > 255 || redData[y, x] < 0) redData[y, x] = sourceRawData[y, x].R;
+                    if (greenData[y, x] > 255 || greenData[y, x] < 0) greenData[y, x] = sourceRawData[y, x].G;
+                    if (blueData[y, x] > 255 || blueData[y, x] < 0) blueData[y, x] = sourceRawData[y, x].B;
 
                     newRawData[y, x] = Color.FromArgb(
                         (int)redData[y, x],
@@ -57,7 +57,7 @@ namespace RasterFramework.Processing
             }
 
             Core.Image newImage = new(width, height);
-            newImage.SetRawData(newRawData);
+            newImage.RawData = newRawData;
 
             return newImage;
         }

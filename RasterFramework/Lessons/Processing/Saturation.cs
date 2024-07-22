@@ -1,11 +1,12 @@
 ﻿using RasterFramework.Core;
+using RasterFramework.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RasterFramework.Processing
+namespace RasterFramework.Lessons.Processing
 {
     internal class Saturation : IFilter
     {
@@ -13,12 +14,12 @@ namespace RasterFramework.Processing
         {
             float coeficient = 0.3f;
 
-            int width = sourceImage.GetWidth();
-            int height = sourceImage.GetHeight();
+            int width = sourceImage.Width;
+            int height = sourceImage.Height;
 
             Core.Image newImage = new(width, height);
-            Color[,] newRawData = newImage.GetRawData();
-            Color[,] sourceRawData = sourceImage.GetRawData();
+            Color[,] newRawData = newImage.RawData;
+            Color[,] sourceRawData = sourceImage.RawData;
 
             for (int y = 0; y < height; y++)
             {
@@ -36,7 +37,7 @@ namespace RasterFramework.Processing
                 }
             }
 
-            newImage.SetRawData(newRawData);
+            newImage.RawData = newRawData;
             return newImage;
         }
 

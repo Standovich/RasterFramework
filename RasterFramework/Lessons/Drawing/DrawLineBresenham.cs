@@ -1,4 +1,4 @@
-﻿using RasterFramework.Core;
+﻿using RasterFramework.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,18 +6,18 @@ using System.Security.Cryptography.Xml;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RasterFramework.LowLevel
+namespace RasterFramework.Lessons.Drawing
 {
     internal class DrawLineBresenham : IDrawLine
     {
         Color colorToDraw = Color.FromArgb(0, 0, 255);
         public void Apply(Core.Image image, Point p0, Point p1)
         {
-            Color[,] rawData = image.GetRawData();
+            Color[,] rawData = image.RawData;
 
             if (Math.Abs(p1.X - p0.X) > Math.Abs(p1.Y - p0.Y))
                 DrawYLine(rawData, p0, p1);
-            else if(Math.Abs(p1.X - p0.X) < Math.Abs(p1.Y - p0.Y))
+            else if (Math.Abs(p1.X - p0.X) < Math.Abs(p1.Y - p0.Y))
                 DrawXLine(rawData, p0, p1);
         }
 
@@ -25,7 +25,7 @@ namespace RasterFramework.LowLevel
         {
             int d = 1;
 
-            if(p1.X < p0.X)
+            if (p1.X < p0.X)
             {
                 (p1.X, p0.X) = (p0.X, p1.X);
                 (p1.Y, p0.Y) = (p0.Y, p1.Y);

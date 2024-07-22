@@ -9,42 +9,22 @@ namespace RasterFramework.Core
 {
     internal class Image
     {
-        private int width;
-        private int height;
-        private Color[,] rawData;
+        public int Width { get; set; }
+        public int Height { get; set; }
+        public Color[,] RawData { get; set; }
 
         public Image(int width, int height)
         {
-            this.width = width;
-            this.height = height;
-            this.rawData = GetEmptyData(width, height);
+            this.Width = width;
+            this.Height = height;
+            this.RawData = GetEmptyData(width, height);
         }
 
         public Image(Color[,] newRawData)
         {
-            this.width = newRawData.GetLength(1);
-            this.height = newRawData.GetLength(0);
-            this.rawData = newRawData;
-        }
-
-        public void SetRawData(Color[,] rawData)
-        {
-            this.rawData = rawData;
-        }
-
-        public Color[,] GetRawData()
-        {
-            return this.rawData;
-        }
-
-        public int GetWidth()
-        {
-            return this.width;
-        }
-
-        public int GetHeight()
-        {
-            return this.height;
+            this.Width = newRawData.GetLength(1);
+            this.Height = newRawData.GetLength(0);
+            this.RawData = newRawData;
         }
 
         public static Color[,] GetEmptyData(int width, int height)
@@ -58,7 +38,20 @@ namespace RasterFramework.Core
                 }
             }
             return retRawData;
-        } 
+        }
+
+        public Color[,] GetRawDataCopy()
+        {
+            Color[,] retRawData = new Color[Height, Width];
+            for (int y = 0; y < Height; y++)
+            {
+                for (int x = 0; x < Width; x++)
+                {
+                    retRawData[y, x] = RawData[y,x];
+                }
+            }
+            return retRawData;
+        }
 
         public static Image LoadFromFile(string fileName)
         {
@@ -75,20 +68,20 @@ namespace RasterFramework.Core
                 }
             }
 
-            newImage.SetRawData(rawData);
+            newImage.RawData = rawData;
 
             return newImage;
         }
 
         public void SaveToFile(string fileName)
         {
-            Bitmap imageToSave = new(width, height);
+            Bitmap imageToSave = new(Width, Height);
 
-            for (int y = 0; y < height; y++)
+            for (int y = 0; y < Height; y++)
             {
-                for (int x = 0; x < width; x++)
+                for (int x = 0; x < Width; x++)
                 {
-                    imageToSave.SetPixel(x, y, rawData[y, x]);
+                    imageToSave.SetPixel(x, y, RawData[y, x]);
                 }
             }
 

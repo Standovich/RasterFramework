@@ -87,7 +87,7 @@ namespace RasterFramework.Forms
                         Value = (decimal)kernel[y, x],
                         Minimum = -1000,
                         Maximum = 1000,
-                        Size = new(50, 25)
+                        AutoSize = true,
                     };
                     cell.Controls[0].Visible = false;
                     cell.Controls[1].Width = Width - 4;
@@ -97,7 +97,7 @@ namespace RasterFramework.Forms
             }
         }
 
-        private void SetKernelGridData(double[,] kernel)
+        private void UpdateKernelGridData(double[,] kernel)
         {
             for (int y = 0; y < kernelGrid.RowCount; y++)
             {
@@ -106,11 +106,6 @@ namespace RasterFramework.Forms
 
                 }
             }
-        }
-
-        private void btnApply_Click(object sender, EventArgs e)
-        {
-
         }
     }
 }

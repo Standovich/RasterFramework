@@ -1,17 +1,17 @@
-﻿using RasterFramework.Core;
+﻿using RasterFramework.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RasterFramework.Processing
+namespace RasterFramework.Lessons.Processing
 {
     internal class GrayScale : IFilter
     {
         public Core.Image Apply(Core.Image sourceImage)
         {
-            Color[,] sourceRawData = sourceImage.GetRawData();
+            Color[,] sourceRawData = sourceImage.RawData;
 
             int width = sourceRawData.GetLength(1);
             int height = sourceRawData.GetLength(0);
@@ -37,7 +37,7 @@ namespace RasterFramework.Processing
             int r = color.R;
             int g = color.G;
             int b = color.B;
-            return (r * 0.299) + (g * 0.587) + (b * 0.114);
+            return r * 0.299 + g * 0.587 + b * 0.114;
         }
 
         public string GetName()

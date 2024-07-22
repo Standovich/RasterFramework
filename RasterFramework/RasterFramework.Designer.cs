@@ -58,7 +58,7 @@
             // 
             // btnSave
             // 
-            btnSave.Location = new Point(231, 36);
+            btnSave.Location = new Point(472, 38);
             btnSave.Name = "btnSave";
             btnSave.Size = new Size(75, 23);
             btnSave.TabIndex = 2;
@@ -126,7 +126,7 @@
             // 
             // btnNewInstance
             // 
-            btnNewInstance.Location = new Point(159, 493);
+            btnNewInstance.Location = new Point(358, 38);
             btnNewInstance.Name = "btnNewInstance";
             btnNewInstance.Size = new Size(77, 23);
             btnNewInstance.TabIndex = 8;
@@ -138,7 +138,7 @@
             // 
             canvasSelectBox.FormattingEnabled = true;
             canvasSelectBox.Items.AddRange(new object[] { "400x400", "1280x720" });
-            canvasSelectBox.Location = new Point(9, 493);
+            canvasSelectBox.Location = new Point(218, 38);
             canvasSelectBox.Name = "canvasSelectBox";
             canvasSelectBox.Size = new Size(121, 23);
             canvasSelectBox.TabIndex = 9;
@@ -147,7 +147,7 @@
             // lblCanvasSize
             // 
             lblCanvasSize.AutoSize = true;
-            lblCanvasSize.Location = new Point(12, 475);
+            lblCanvasSize.Location = new Point(218, 20);
             lblCanvasSize.Name = "lblCanvasSize";
             lblCanvasSize.Size = new Size(110, 15);
             lblCanvasSize.TabIndex = 10;
@@ -282,7 +282,7 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(564, 526);
+            ClientSize = new Size(564, 486);
             Controls.Add(btnAddConvolution);
             Controls.Add(lblConvolution);
             Controls.Add(btnApplyFilter);
@@ -305,7 +305,7 @@
             Controls.Add(lblOpenImg);
             Controls.Add(imgSelectBox);
             Controls.Add(btnSave);
-            MinimumSize = new Size(440, 565);
+            MinimumSize = new Size(580, 525);
             Name = "RasterFramework";
             Text = "RasterFramework";
             Load += Form1_Load;

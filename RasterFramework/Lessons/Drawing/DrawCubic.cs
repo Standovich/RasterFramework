@@ -1,11 +1,6 @@
-﻿using RasterFramework.Core;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using RasterFramework.Interfaces;
 
-namespace RasterFramework.LowLevel
+namespace RasterFramework.Lessons.Drawing
 {
     internal class DrawCubic : IDrawCurve
     {
@@ -14,11 +9,11 @@ namespace RasterFramework.LowLevel
         {
             double d = 0.01;
             int x1 = points[0].X, y1 = points[0].Y;
-            int qx1 = points[0].X, qx2 = 3 * (points[1].X - points[0].X), 
-                qx3 = 3 * (points[2].X - 2 * points[1].X + points[0].X), 
+            int qx1 = points[0].X, qx2 = 3 * (points[1].X - points[0].X),
+                qx3 = 3 * (points[2].X - 2 * points[1].X + points[0].X),
                 qx4 = points[3].X - 3 * points[2].X + 3 * points[1].X - points[0].X;
-            int qy1 = points[0].Y, qy2 = 3 * (points[1].Y - points[0].Y), 
-                qy3 = 3 * (points[2].Y - 2 * points[1].Y + points[0].Y), 
+            int qy1 = points[0].Y, qy2 = 3 * (points[1].Y - points[0].Y),
+                qy3 = 3 * (points[2].Y - 2 * points[1].Y + points[0].Y),
                 qy4 = points[3].Y - 3 * points[2].Y + 3 * points[1].Y - points[0].Y;
             for (double i = 0; i <= 1; i += d)
             {

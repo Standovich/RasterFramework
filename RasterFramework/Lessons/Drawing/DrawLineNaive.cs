@@ -1,20 +1,20 @@
-﻿using RasterFramework.Core;
+﻿using RasterFramework.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RasterFramework.LowLevel
+namespace RasterFramework.Lessons.Drawing
 {
     internal class DrawLineNaive : IDrawLine
     {
         public void Apply(Core.Image image, Point p0, Point p1)
         {
-            Color[,] rawData = image.GetRawData();
+            Color[,] rawData = image.RawData;
             Color colorToDraw = Color.FromArgb(255, 0, 0);
 
-            if(p1.X < p0.X)
+            if (p1.X < p0.X)
             {
                 (p1.X, p0.X) = (p0.X, p1.X);
                 (p1.Y, p0.Y) = (p0.Y, p1.Y);
