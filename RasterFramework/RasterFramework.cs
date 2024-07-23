@@ -273,7 +273,8 @@ namespace RasterFramework
                 case 3:
                     OpenFileDialog frmOpenImg = new OpenFileDialog()
                     {
-                        Title = "Otevøít obrázek"
+                        Title = "Otevøít obrázek",
+                        Filter = "Image Files|*.jpg;*.jpeg;*.png"
                     };
                     var open = frmOpenImg.ShowDialog();
                     if (open == DialogResult.OK)
