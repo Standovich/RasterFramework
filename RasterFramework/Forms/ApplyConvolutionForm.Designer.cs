@@ -34,13 +34,11 @@
             kernelSelectBox = new ComboBox();
             btnApply = new Button();
             btnCancel = new Button();
-            kernelGrid = new TableLayoutPanel();
-            numRow = new NumericUpDown();
-            numColumn = new NumericUpDown();
-            lblRows = new Label();
-            lblColumn = new Label();
-            ((System.ComponentModel.ISupportInitialize)numRow).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)numColumn).BeginInit();
+            numGridSize = new NumericUpDown();
+            lblGridSize = new Label();
+            kernelGrid = new DataGridView();
+            ((System.ComponentModel.ISupportInitialize)numGridSize).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)kernelGrid).BeginInit();
             SuspendLayout();
             // 
             // lblMethod
@@ -59,6 +57,7 @@
             methodSelectBox.Name = "methodSelectBox";
             methodSelectBox.Size = new Size(121, 23);
             methodSelectBox.TabIndex = 1;
+            methodSelectBox.SelectedIndexChanged += methodSelectBox_SelectedIndexChanged;
             // 
             // lblKernel
             // 
@@ -76,11 +75,12 @@
             kernelSelectBox.Name = "kernelSelectBox";
             kernelSelectBox.Size = new Size(121, 23);
             kernelSelectBox.TabIndex = 3;
+            kernelSelectBox.SelectedIndexChanged += kernelSelectBox_SelectedIndexChanged;
             // 
             // btnApply
             // 
             btnApply.DialogResult = DialogResult.OK;
-            btnApply.Location = new Point(12, 368);
+            btnApply.Location = new Point(12, 404);
             btnApply.Name = "btnApply";
             btnApply.Size = new Size(75, 23);
             btnApply.TabIndex = 4;
@@ -90,76 +90,59 @@
             // btnCancel
             // 
             btnCancel.DialogResult = DialogResult.Cancel;
-            btnCancel.Location = new Point(93, 368);
+            btnCancel.Location = new Point(93, 404);
             btnCancel.Name = "btnCancel";
             btnCancel.Size = new Size(75, 23);
             btnCancel.TabIndex = 5;
             btnCancel.Text = "Zrušit";
             btnCancel.UseVisualStyleBackColor = true;
             // 
+            // numGridSize
+            // 
+            numGridSize.Increment = new decimal(new int[] { 2, 0, 0, 0 });
+            numGridSize.Location = new Point(128, 129);
+            numGridSize.Maximum = new decimal(new int[] { 9, 0, 0, 0 });
+            numGridSize.Minimum = new decimal(new int[] { 3, 0, 0, 0 });
+            numGridSize.Name = "numGridSize";
+            numGridSize.Size = new Size(40, 23);
+            numGridSize.TabIndex = 7;
+            numGridSize.Value = new decimal(new int[] { 3, 0, 0, 0 });
+            numGridSize.ValueChanged += numGridSize_ValueChanged;
+            // 
+            // lblGridSize
+            // 
+            lblGridSize.AutoSize = true;
+            lblGridSize.Location = new Point(12, 131);
+            lblGridSize.Name = "lblGridSize";
+            lblGridSize.Size = new Size(110, 15);
+            lblGridSize.TabIndex = 9;
+            lblGridSize.Text = "Velikost matice (x²):";
+            // 
             // kernelGrid
             // 
-            kernelGrid.ColumnCount = 2;
-            kernelGrid.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
-            kernelGrid.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
-            kernelGrid.Location = new Point(12, 162);
+            kernelGrid.AllowUserToAddRows = false;
+            kernelGrid.AllowUserToDeleteRows = false;
+            kernelGrid.AllowUserToResizeColumns = false;
+            kernelGrid.AllowUserToResizeRows = false;
+            kernelGrid.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+            kernelGrid.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            kernelGrid.ColumnHeadersVisible = false;
+            kernelGrid.Location = new Point(12, 158);
             kernelGrid.Name = "kernelGrid";
-            kernelGrid.RowCount = 2;
-            kernelGrid.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            kernelGrid.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            kernelGrid.Size = new Size(200, 200);
-            kernelGrid.TabIndex = 6;
-            // 
-            // numRow
-            // 
-            numRow.Increment = new decimal(new int[] { 2, 0, 0, 0 });
-            numRow.Location = new Point(60, 129);
-            numRow.Maximum = new decimal(new int[] { 9, 0, 0, 0 });
-            numRow.Minimum = new decimal(new int[] { 3, 0, 0, 0 });
-            numRow.Name = "numRow";
-            numRow.Size = new Size(40, 23);
-            numRow.TabIndex = 7;
-            numRow.Value = new decimal(new int[] { 3, 0, 0, 0 });
-            // 
-            // numColumn
-            // 
-            numColumn.Increment = new decimal(new int[] { 2, 0, 0, 0 });
-            numColumn.Location = new Point(169, 129);
-            numColumn.Maximum = new decimal(new int[] { 9, 0, 0, 0 });
-            numColumn.Minimum = new decimal(new int[] { 3, 0, 0, 0 });
-            numColumn.Name = "numColumn";
-            numColumn.Size = new Size(40, 23);
-            numColumn.TabIndex = 8;
-            numColumn.Value = new decimal(new int[] { 3, 0, 0, 0 });
-            // 
-            // lblRows
-            // 
-            lblRows.AutoSize = true;
-            lblRows.Location = new Point(12, 131);
-            lblRows.Name = "lblRows";
-            lblRows.Size = new Size(42, 15);
-            lblRows.TabIndex = 9;
-            lblRows.Text = "Řádky:";
-            // 
-            // lblColumn
-            // 
-            lblColumn.AutoSize = true;
-            lblColumn.Location = new Point(113, 131);
-            lblColumn.Name = "lblColumn";
-            lblColumn.Size = new Size(52, 15);
-            lblColumn.TabIndex = 10;
-            lblColumn.Text = "Sloupce:";
+            kernelGrid.RowHeadersVisible = false;
+            kernelGrid.RowTemplate.Height = 25;
+            kernelGrid.Size = new Size(240, 240);
+            kernelGrid.TabIndex = 10;
+            kernelGrid.CellValueChanged += kernelGrid_CellValueChanged;
             // 
             // ApplyConvolutionForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(339, 409);
-            Controls.Add(lblColumn);
-            Controls.Add(lblRows);
-            Controls.Add(numColumn);
-            Controls.Add(numRow);
+            ClientSize = new Size(264, 436);
             Controls.Add(kernelGrid);
+            Controls.Add(lblGridSize);
+            Controls.Add(numGridSize);
             Controls.Add(btnCancel);
             Controls.Add(btnApply);
             Controls.Add(kernelSelectBox);
@@ -169,8 +152,8 @@
             Name = "ApplyConvolutionForm";
             Text = "Konvoluce";
             Load += ApplyConvolutionForm_Load;
-            ((System.ComponentModel.ISupportInitialize)numRow).EndInit();
-            ((System.ComponentModel.ISupportInitialize)numColumn).EndInit();
+            ((System.ComponentModel.ISupportInitialize)numGridSize).EndInit();
+            ((System.ComponentModel.ISupportInitialize)kernelGrid).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -183,10 +166,10 @@
         private ComboBox kernelSelectBox;
         private Button btnApply;
         private Button btnCancel;
-        private TableLayoutPanel kernelGrid;
-        private NumericUpDown numRow;
+        private NumericUpDown numGridSize;
         private NumericUpDown numColumn;
-        private Label lblRows;
+        private Label lblGridSize;
         private Label lblColumn;
+        private DataGridView kernelGrid;
     }
 }

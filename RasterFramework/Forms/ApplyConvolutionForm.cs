@@ -64,46 +64,122 @@ namespace RasterFramework.Forms
 
             SelectedAlgorithm = listOfClasses.First();
             methodSelectBox.SelectedIndex = 0;
-            Kernel = kernels.First();
+            CreateKernelCopy(kernels.First());
             kernelSelectBox.SelectedIndex = 0;
             InitKernelGrid(Kernel);
+        }
+
+        private void CreateKernelCopy(double[,] kernel)
+        {
+            Kernel = new double[kernel.GetLength(0), kernel.GetLength(1)];
+            Array.Copy(kernel, Kernel, kernel.Length);
         }
 
         private void InitKernelGrid(double[,] kernel)
         {
             int gridSize = (int)Math.Sqrt(kernel.Length);
 
-            kernelGrid.RowCount = gridSize;
+            kernelGrid.Rows.Clear();
+            kernelGrid.Columns.Clear();
             kernelGrid.ColumnCount = gridSize;
 
-            for (int y = 0; y < kernelGrid.RowCount; y++)
+            for (int y = 0; y < gridSize; y++)
             {
-                for (int x = 0; x < kernelGrid.ColumnCount; x++)
-                {
-                    var cell = new NumericUpDown()
-                    {
-                        Dock = DockStyle.Fill,
-                        TextAlign = HorizontalAlignment.Center,
-                        Value = (decimal)kernel[y, x],
-                        Minimum = -1000,
-                        Maximum = 1000,
-                        AutoSize = true,
-                    };
-                    cell.Controls[0].Visible = false;
-                    cell.Controls[1].Width = Width - 4;
+                DataGridViewRow row = new();
+                row.CreateCells(kernelGrid);
 
-                    kernelGrid.Controls.Add(cell, y, x);
+                for (int x = 0; x < gridSize; x++)
+                {
+                    row.Cells[x].Value = kernel[y, x];
+                }
+                kernelGrid.Rows.Add(row);
+            }
+        }
+
+        private void CreateEmptyKernel(int size)
+        {
+            Kernel = new double[size, size];
+            for (int y = 0; y < size; y++)
+            {
+                for (int x = 0; x < size; x++)
+                {
+                    Kernel[y, x] = 0;
                 }
             }
         }
 
-        private void UpdateKernelGridData(double[,] kernel)
+        private void numGridSize_ValueChanged(object sender, EventArgs e)
         {
-            for (int y = 0; y < kernelGrid.RowCount; y++)
-            {
-                for (int x = 0; x < kernelGrid.ColumnCount; x++)
-                {
+            kernelSelectBox.SelectedIndex = kernelSelectBox.Items.Count - 1;
 
+            int newSize = (int)numGridSize.Value;
+
+            CreateEmptyKernel(newSize);
+            kernelGrid.Rows.Clear();
+            kernelGrid.Columns.Clear();
+            kernelGrid.ColumnCount = newSize;
+
+            for (int y = 0; y < newSize; y++)
+            {
+                DataGridViewRow row = new();
+                row.CreateCells(kernelGrid);
+
+                for (int x = 0; x < newSize; x++)
+                {
+                    row.Cells[x].Value = 0;
+                }
+                kernelGrid.Rows.Add(row);
+            }
+        }
+
+        private void kernelGrid_CellValueChanged(object sender, DataGridViewCellEventArgs e)
+        {
+            kernelSelectBox.SelectedIndex = kernelSelectBox.Items.Count - 1;
+
+            int indexX = e.ColumnIndex;
+            int indexY = e.RowIndex;
+
+            Kernel[indexY, indexX] = double.Parse(kernelGrid[indexX, indexY].Value.ToString());
+        }
+
+        private void kernelSelectBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (kernelSelectBox.SelectedItem.ToString() != "Vlastní")
+            {
+                CreateKernelCopy(kernels[kernelSelectBox.SelectedIndex]);
+
+                int gridSize = (int)Math.Sqrt(Kernel.Length);
+
+                kernelGrid.Rows.Clear();
+                kernelGrid.Columns.Clear();
+                kernelGrid.ColumnCount = gridSize;
+
+                for (int y = 0; y < gridSize; y++)
+                {
+                    DataGridViewRow row = new();
+                    row.CreateCells(kernelGrid);
+
+                    for (int x = 0; x < gridSize; x++)
+                    {
+                        row.Cells[x].Value = Kernel[y, x];
+                    }
+                    kernelGrid.Rows.Add(row);
+                }
+            }
+        }
+
+        private void methodSelectBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            foreach (Type type in listOfClasses)
+            {
+                object convolutionClass = Activator.CreateInstance(type);
+                MethodInfo methodInfo = type.GetMethod("GetName");
+                var result = methodInfo.Invoke(convolutionClass, null);
+
+                if ((string)result == methodSelectBox.SelectedItem.ToString())
+                {
+                    SelectedAlgorithm = type;
+                    break;
                 }
             }
         }

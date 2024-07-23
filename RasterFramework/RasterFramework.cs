@@ -1,3 +1,4 @@
+using RasterFramework.Core;
 using RasterFramework.Forms;
 using RasterFramework.Interfaces;
 using System.Reflection;
@@ -8,6 +9,7 @@ namespace RasterFramework
     {
         private Core.Image image;
         private Core.Image filledImage;
+        private Renderer renderer;
 
         private bool fillActive;
         private bool imageLoaded = false;
@@ -30,6 +32,7 @@ namespace RasterFramework
         private Type SelectedFilterAlgorithm;
 
         private int imageScale = 1;
+        private bool isScaled  = false;
 
         public RasterFramework()
         {
@@ -39,6 +42,7 @@ namespace RasterFramework
         //Inicializaèní metody
         private void Form1_Load(object sender, EventArgs e)
         {
+            renderer = new();
             image = new(imageBox.Width, imageBox.Height);
             fillActive = false;
             canvasSelectBox.SelectedIndex = 0;
@@ -127,63 +131,30 @@ namespace RasterFramework
             else btnApplyFilter.Enabled = false;
         }
 
-        //Volání vybraných metod ze studentské èásti
-        private void DrawLine(Type type, Point p0, Point p1)
-        {
-            Assembly assem = typeof(IDrawLine).Assembly;
-            line = (IDrawLine)assem.CreateInstance(type.FullName.ToString());
-
-            line.Apply(image, p0, p1);
-        }
-
-        private void DrawCurve(Type type, Point[] points)
-        {
-            Assembly assem = typeof(IDrawCurve).Assembly;
-            curve = (IDrawCurve)assem.CreateInstance(type.FullName.ToString());
-
-            curve.Apply(image, points);
-        }
-
-        private void DrawFill(Type type)
-        {
-            filledImage = new(image.RawData);
-
-            Assembly assem = typeof(IDrawFill).Assembly;
-            fill = (IDrawFill)assem.CreateInstance(type.FullName.ToString());
-
-            fill.Apply(filledImage);
-        }
-
-        private void ApplyFilter(Type type)
-        {
-            Assembly assem = typeof(IFilter).Assembly;
-            filter = (IFilter)assem.CreateInstance(type.FullName.ToString());
-
-            image = filter.Apply(image);
-        }
-
         //Škálování a vykreslování obrazu
         private void DrawImage(Color[,] rawData)
         {
-            int width = rawData.GetLength(1);
-            int height = rawData.GetLength(0);
-
-            Bitmap imageToDraw = new(width, height);
-
-            for (int y = 0; y < height; y++)
+            if(rawData != null)
             {
-                for (int x = 0; x < width; x++)
-                {
-                    imageToDraw.SetPixel(x, y, rawData[y, x]);
-                }
-            }
+                int width = rawData.GetLength(1);
+                int height = rawData.GetLength(0);
 
-            imageBox.Image = imageToDraw;
+                Bitmap imageToDraw = new(width, height);
+
+                for (int y = 0; y < height; y++)
+                {
+                    for (int x = 0; x < width; x++)
+                    {
+                        imageToDraw.SetPixel(x, y, rawData[y, x]);
+                    }
+                }
+
+                imageBox.Image = imageToDraw;
+            }
         }
 
-        private Color[,] ResizeImage()
+        private Color[,] ResizeImage(Color[,] rawData)
         {
-            Color[,] rawData = image.RawData;
             int height = image.Height;
             int width = image.Width;
 
@@ -335,7 +306,8 @@ namespace RasterFramework
         private void numZoom_ValueChanged(object sender, EventArgs e)
         {
             imageScale = (int)numZoom.Value;
-            DrawImage(ResizeImage());
+            isScaled = imageScale != 1 ? true : false;
+            DrawImage(ResizeImage(image.RawData));
         }
 
         private void btnNewInstance_Click(object sender, EventArgs e)
@@ -371,31 +343,35 @@ namespace RasterFramework
         private void btnAddLIne_Click(object sender, EventArgs e)
         {
             AddLineForm addLineForm = new(drawLineClasses,
-                new(image.Width, image.Height));
+                new(image.Width - 1, image.Height - 1));
             var addLine = addLineForm.ShowDialog();
 
             if (addLine == DialogResult.OK)
             {
-                DrawLine(
-                    addLineForm.SelectedAlgorithm,
-                    addLineForm.PointA,
-                    addLineForm.PointB);
-                DrawImage(image.RawData);
+                DrawImage(
+                    renderer.DrawLine(
+                        image,
+                        addLineForm.SelectedAlgorithm,
+                        addLineForm.PointA,
+                        addLineForm.PointB)
+                    );
             }
         }
 
         private void btnAddCurve_Click(object sender, EventArgs e)
         {
             AddCurveForm addCurveForm = new(drawCurveClasses,
-                new(image.Width, image.Height));
+                new(image.Width - 1, image.Height - 1));
             var addCurve = addCurveForm.ShowDialog();
 
             if (addCurve == DialogResult.OK)
             {
-                DrawCurve(
-                    addCurveForm.SelectedAlgorithm,
-                    addCurveForm.Points.ToArray());
-                DrawImage(image.RawData);
+                DrawImage(
+                    renderer.DrawCurve(
+                        image,
+                        addCurveForm.SelectedAlgorithm,
+                        addCurveForm.Points.ToArray())
+                    );
             }
         }
 
@@ -406,8 +382,12 @@ namespace RasterFramework
                 fillActive = fillCheckBox.Checked;
                 if (fillActive)
                 {
-                    DrawFill(SelectedFillAlgorithm);
-                    DrawImage(filledImage.RawData);
+                    DrawImage(
+                        renderer.DrawFill(
+                            fillCheckBox,
+                            filledImage,
+                            SelectedFillAlgorithm)
+                        );
                 }
                 else DrawImage(image.RawData);
             }
@@ -432,8 +412,11 @@ namespace RasterFramework
 
         private void btnApplyFilter_Click(object sender, EventArgs e)
         {
-            ApplyFilter(SelectedFilterAlgorithm);
-            DrawImage(image.RawData);
+            DrawImage(
+                renderer.ApplyFilter(
+                    image,
+                    SelectedFilterAlgorithm)
+                );
         }
 
         private void filterSelectBox_SelectedIndexChanged(object sender, EventArgs e)
@@ -459,7 +442,12 @@ namespace RasterFramework
 
             if (applyConvolution == DialogResult.OK)
             {
-
+                DrawImage(
+                    renderer.ApplyConvolution(
+                        image,
+                        applyConvolutionForm.SelectedAlgorithm,
+                        applyConvolutionForm.Kernel)
+                    );
             }
         }
     }
