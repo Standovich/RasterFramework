@@ -9,16 +9,11 @@ namespace RasterFramework
     {
         private Core.Image image;
         private Core.Image filledImage;
+        private AlgorithmCall algorithmCall;
         private Renderer renderer;
 
         private bool fillActive;
         private bool imageLoaded = false;
-
-        private IDrawLine line;
-        private IDrawCurve curve;
-        private IDrawFill fill;
-        private IFilter filter;
-        private IConvolution convolution;
 
         private IEnumerable<Type> drawLineClasses;
         private IEnumerable<Type> drawCurveClasses;
@@ -42,6 +37,7 @@ namespace RasterFramework
         //Inicializaèní metody
         private void Form1_Load(object sender, EventArgs e)
         {
+            algorithmCall = new();
             renderer = new();
             image = new(imageBox.Width, imageBox.Height);
             fillActive = false;
@@ -350,7 +346,7 @@ namespace RasterFramework
             if (addLine == DialogResult.OK)
             {
                 DrawImage(
-                    renderer.DrawLine(
+                    algorithmCall.DrawLine(
                         image,
                         addLineForm.SelectedAlgorithm,
                         addLineForm.PointA,
@@ -368,7 +364,7 @@ namespace RasterFramework
             if (addCurve == DialogResult.OK)
             {
                 DrawImage(
-                    renderer.DrawCurve(
+                    algorithmCall.DrawCurve(
                         image,
                         addCurveForm.SelectedAlgorithm,
                         addCurveForm.Points.ToArray())
@@ -384,7 +380,7 @@ namespace RasterFramework
                 if (fillActive)
                 {
                     DrawImage(
-                        renderer.DrawFill(
+                        algorithmCall.DrawFill(
                             fillCheckBox,
                             filledImage,
                             SelectedFillAlgorithm)
@@ -414,7 +410,7 @@ namespace RasterFramework
         private void btnApplyFilter_Click(object sender, EventArgs e)
         {
             DrawImage(
-                renderer.ApplyFilter(
+                algorithmCall.ApplyFilter(
                     image,
                     SelectedFilterAlgorithm)
                 );
@@ -444,7 +440,7 @@ namespace RasterFramework
             if (applyConvolution == DialogResult.OK)
             {
                 DrawImage(
-                    renderer.ApplyConvolution(
+                    algorithmCall.ApplyConvolution(
                         image,
                         applyConvolutionForm.SelectedAlgorithm,
                         applyConvolutionForm.Kernel)
