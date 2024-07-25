@@ -20,6 +20,7 @@ namespace RasterFramework.Core
 
         public Color[,] DrawLine(Image image, Type type, Point p0, Point p1)
         {
+            Color[,] rawDataCopy = image.GetRawDataCopy();
             try
             {
                 Assembly assem = typeof(IDrawLine).Assembly;
@@ -30,21 +31,32 @@ namespace RasterFramework.Core
             }
             catch (Exception ex)
             {
-                return null;
+                HandleException(ex);
+                return rawDataCopy;
             }
         }
 
         public Color[,] DrawCurve(Image image, Type type, Point[] points)
         {
-            Assembly assem = typeof(IDrawCurve).Assembly;
-            curve = (IDrawCurve)assem.CreateInstance(type.FullName.ToString());
+            Color[,] rawDataCopy = image.GetRawDataCopy();
+            try
+            {
+                Assembly assem = typeof(IDrawCurve).Assembly;
+                curve = (IDrawCurve)assem.CreateInstance(type.FullName.ToString());
 
-            curve.Apply(image, points);
-            return image.RawData;
+                curve.Apply(image, points);
+                return image.RawData;
+            }
+            catch(Exception ex)
+            {
+                HandleException(ex);
+                return rawDataCopy;
+            }
         }
 
         public Color[,] DrawFill(CheckBox fillCheckBox, Image image, Type type)
         {
+            Color[,] rawDataCopy = image.GetRawDataCopy();
             try
             {
                 Assembly assem = typeof(IDrawFill).Assembly;
@@ -57,24 +69,42 @@ namespace RasterFramework.Core
             {
                 HandleException(ex);
                 fillCheckBox.CheckState = CheckState.Unchecked;
-                return null;
+                return rawDataCopy;
             }
         }
 
         public Color[,] ApplyFilter(Image image, Type type)
         {
-            Assembly assem = typeof(IFilter).Assembly;
-            filter = (IFilter)assem.CreateInstance(type.FullName.ToString());
+            Color[,] rawDataCopy = image.GetRawDataCopy();
+            try
+            {
+                Assembly assem = typeof(IFilter).Assembly;
+                filter = (IFilter)assem.CreateInstance(type.FullName.ToString());
 
-            return filter.Apply(image).RawData;
+                return filter.Apply(image).RawData;
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex);
+                return rawDataCopy;
+            }
         }
 
         public Color[,] ApplyConvolution(Image image, Type type, double[,] kernel)
         {
-            Assembly assem = typeof(IFilter).Assembly;
-            convolution = (IConvolution)assem.CreateInstance(type.FullName.ToString());
+            Color[,] rawDataCopy = image.GetRawDataCopy();
+            try
+            {
+                Assembly assem = typeof(IFilter).Assembly;
+                convolution = (IConvolution)assem.CreateInstance(type.FullName.ToString());
 
-            return convolution.Apply(image, kernel).RawData;
+                return convolution.Apply(image, kernel).RawData;
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex);
+                return rawDataCopy;
+            }
         }
 
         private void HandleException(Exception ex)
@@ -87,6 +117,11 @@ namespace RasterFramework.Core
             else if (ex.GetType() == typeof(NotImplementedException))
             {
                 MessageBox.Show("Vybraný algoritmus ještě není implementován.\n Celý detail chyby:\n"
+                    + ex.StackTrace, "Nastala chyba!");
+            }
+            else if (ex.GetType() == typeof(NullReferenceException))
+            {
+                MessageBox.Show("Algoritmus se snaží pracovat s objektem, který neexistuje.\n Celý detail chyby:\n"
                     + ex.StackTrace, "Nastala chyba!");
             }
             else

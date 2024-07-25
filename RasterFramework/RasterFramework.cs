@@ -79,6 +79,7 @@ namespace RasterFramework
         {
             InitFillUI();
             InitFilterUI();
+            InitFormButtons();
         }
 
         private void InitFillUI()
@@ -130,6 +131,13 @@ namespace RasterFramework
                 filterSelectBox.SelectedIndex = 0;
             }
             else btnApplyFilter.Enabled = false;
+        }
+
+        private void InitFormButtons()
+        {
+            if (drawLineClasses.Count() > 0) btnAddLIne.Enabled = true;
+            if (drawCurveClasses.Count() > 0) btnAddCurve.Enabled = true;
+            if (convolutionClasses.Count() > 0) btnAddConvolution.Enabled = true;
         }
 
         //Metody uživatelského rozhraní
@@ -277,16 +285,18 @@ namespace RasterFramework
                 fillActive = fillCheckBox.Checked;
                 if (fillActive)
                 {
-                    image = new(algorithmCall.DrawFill(
+                    filledImage = new(image.RawData);
+
+                    filledImage = new(algorithmCall.DrawFill(
                             fillCheckBox,
                             filledImage,
                             SelectedFillAlgorithm));
                     if (isScaled)
                     {
-                        Color[,] newRawData = renderer.ResizeImage(image.RawData, imageScale);
+                        Color[,] newRawData = renderer.ResizeImage(filledImage.RawData, imageScale);
                         renderer.DrawImage(newRawData, imageBox);
                     }
-                    else renderer.DrawImage(image.RawData, imageBox);
+                    else renderer.DrawImage(filledImage.RawData, imageBox);
                 }
                 else
                 {

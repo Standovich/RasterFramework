@@ -32,7 +32,9 @@ namespace RasterFramework.Core
                 MessageBox.Show("Obdržená matice pixelů je typu null!\n" +
                     "Algoritmus odpovědný za poskytnuté pole nepracuje správně!",
                     "Nastala chyba!");
-                pictureBox.Image = new Bitmap(10, 10);
+                DrawImage(
+                    Image.GetEmptyData(pictureBox.Width, pictureBox.Height), 
+                    pictureBox);
             }
         }
 

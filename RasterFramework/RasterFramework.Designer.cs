@@ -155,6 +155,7 @@
             // 
             // btnAddLIne
             // 
+            btnAddLIne.Enabled = false;
             btnAddLIne.Location = new Point(9, 118);
             btnAddLIne.Name = "btnAddLIne";
             btnAddLIne.Size = new Size(75, 23);
@@ -183,6 +184,7 @@
             // 
             // btnAddCurve
             // 
+            btnAddCurve.Enabled = false;
             btnAddCurve.Location = new Point(9, 171);
             btnAddCurve.Name = "btnAddCurve";
             btnAddCurve.Size = new Size(75, 23);
@@ -270,6 +272,7 @@
             // 
             // btnAddConvolution
             // 
+            btnAddConvolution.Enabled = false;
             btnAddConvolution.Location = new Point(9, 396);
             btnAddConvolution.Name = "btnAddConvolution";
             btnAddConvolution.Size = new Size(75, 23);
