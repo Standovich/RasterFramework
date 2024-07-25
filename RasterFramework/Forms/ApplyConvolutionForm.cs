@@ -18,6 +18,7 @@ namespace RasterFramework.Forms
         private IEnumerable<Type> listOfClasses;
         private Array kernelEnums;
         private List<double[,]> kernels;
+        private bool EventsOff = false;
 
         public Type SelectedAlgorithm { get; set; }
         public double[,] Kernel { get; set; }
@@ -51,6 +52,8 @@ namespace RasterFramework.Forms
 
         private void ApplyConvolutionForm_Load(object sender, EventArgs e)
         {
+            EventsOff = true;
+
             foreach (string name in listOfAlgorithms)
             {
                 methodSelectBox.Items.Add(name);
@@ -67,6 +70,8 @@ namespace RasterFramework.Forms
             CreateKernelCopy(kernels.First());
             kernelSelectBox.SelectedIndex = 0;
             InitKernelGrid(Kernel);
+
+            EventsOff = false;
         }
 
         private void CreateKernelCopy(double[,] kernel)
@@ -144,42 +149,48 @@ namespace RasterFramework.Forms
 
         private void kernelSelectBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (kernelSelectBox.SelectedItem.ToString() != "Vlastní")
+            if (!EventsOff)
             {
-                CreateKernelCopy(kernels[kernelSelectBox.SelectedIndex]);
-
-                int gridSize = (int)Math.Sqrt(Kernel.Length);
-
-                kernelGrid.Rows.Clear();
-                kernelGrid.Columns.Clear();
-                kernelGrid.ColumnCount = gridSize;
-
-                for (int y = 0; y < gridSize; y++)
+                if (kernelSelectBox.SelectedItem.ToString() != "Vlastní")
                 {
-                    DataGridViewRow row = new();
-                    row.CreateCells(kernelGrid);
+                    CreateKernelCopy(kernels[kernelSelectBox.SelectedIndex]);
 
-                    for (int x = 0; x < gridSize; x++)
+                    int gridSize = (int)Math.Sqrt(Kernel.Length);
+
+                    kernelGrid.Rows.Clear();
+                    kernelGrid.Columns.Clear();
+                    kernelGrid.ColumnCount = gridSize;
+
+                    for (int y = 0; y < gridSize; y++)
                     {
-                        row.Cells[x].Value = Kernel[y, x];
+                        DataGridViewRow row = new();
+                        row.CreateCells(kernelGrid);
+
+                        for (int x = 0; x < gridSize; x++)
+                        {
+                            row.Cells[x].Value = Kernel[y, x];
+                        }
+                        kernelGrid.Rows.Add(row);
                     }
-                    kernelGrid.Rows.Add(row);
                 }
             }
         }
 
         private void methodSelectBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            foreach (Type type in listOfClasses)
+            if(!EventsOff)
             {
-                object convolutionClass = Activator.CreateInstance(type);
-                MethodInfo methodInfo = type.GetMethod("GetName");
-                var result = methodInfo.Invoke(convolutionClass, null);
-
-                if ((string)result == methodSelectBox.SelectedItem.ToString())
+                foreach (Type type in listOfClasses)
                 {
-                    SelectedAlgorithm = type;
-                    break;
+                    object convolutionClass = Activator.CreateInstance(type);
+                    MethodInfo methodInfo = type.GetMethod("GetName");
+                    var result = methodInfo.Invoke(convolutionClass, null);
+
+                    if ((string)result == methodSelectBox.SelectedItem.ToString())
+                    {
+                        SelectedAlgorithm = type;
+                        break;
+                    }
                 }
             }
         }

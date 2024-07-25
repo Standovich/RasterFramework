@@ -16,6 +16,7 @@ namespace RasterFramework.Forms
         private List<string> listOfAlgorithms;
         private IEnumerable<Type> listOfClasses;
         private Size maxSize;
+        private bool EventsOff = false;
 
         public Type SelectedAlgorithm { get; set; }
         public List<Point> Points { get; set; }
@@ -43,6 +44,8 @@ namespace RasterFramework.Forms
 
         private void AddCurveForm_Load(object sender, EventArgs e)
         {
+            EventsOff = true;
+
             foreach (string name in listOfAlgorithms)
             {
                 curveSelectBox.Items.Add(name);
@@ -54,6 +57,8 @@ namespace RasterFramework.Forms
 
             SelectedAlgorithm = listOfClasses.First();
             curveSelectBox.SelectedIndex = 0;
+
+            EventsOff = false;
         }
 
         private void btnAddPoint_Click(object sender, EventArgs e)
@@ -65,16 +70,19 @@ namespace RasterFramework.Forms
 
         private void curveSelectBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            foreach (Type type in listOfClasses)
+            if(!EventsOff)
             {
-                object lineClass = Activator.CreateInstance(type);
-                MethodInfo methodInfo = type.GetMethod("GetName");
-                var result = methodInfo.Invoke(lineClass, null);
-
-                if ((string)result == curveSelectBox.SelectedItem.ToString())
+                foreach (Type type in listOfClasses)
                 {
-                    SelectedAlgorithm = type;
-                    break;
+                    object lineClass = Activator.CreateInstance(type);
+                    MethodInfo methodInfo = type.GetMethod("GetName");
+                    var result = methodInfo.Invoke(lineClass, null);
+
+                    if ((string)result == curveSelectBox.SelectedItem.ToString())
+                    {
+                        SelectedAlgorithm = type;
+                        break;
+                    }
                 }
             }
         }

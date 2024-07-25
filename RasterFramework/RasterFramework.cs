@@ -14,6 +14,7 @@ namespace RasterFramework
 
         private bool fillActive;
         private bool imageLoaded = false;
+        private bool EventsOff = false;
 
         private IEnumerable<Type> drawLineClasses;
         private IEnumerable<Type> drawCurveClasses;
@@ -37,14 +38,18 @@ namespace RasterFramework
         //Inicializaèní metody
         private void Form1_Load(object sender, EventArgs e)
         {
+            EventsOff = true;
+
             algorithmCall = new();
             renderer = new();
             image = new(imageBox.Width, imageBox.Height);
-            fillActive = false;
             canvasSelectBox.SelectedIndex = 0;
+            fillActive = false;
             LoadClassLists();
             InitUI();
-            DrawImage(image.RawData);
+            renderer.DrawImage(image.RawData, imageBox);
+
+            EventsOff = false;
         }
 
         private void LoadClassLists()
@@ -127,131 +132,6 @@ namespace RasterFramework
             else btnApplyFilter.Enabled = false;
         }
 
-        //Škálování a vykreslování obrazu
-        private void DrawImage(Color[,] rawData)
-        {
-            if(rawData != null)
-            {
-                int width = rawData.GetLength(1);
-                int height = rawData.GetLength(0);
-
-                Bitmap imageToDraw = new(width, height);
-
-                for (int y = 0; y < height; y++)
-                {
-                    for (int x = 0; x < width; x++)
-                    {
-                        imageToDraw.SetPixel(x, y, rawData[y, x]);
-                    }
-                }
-
-                imageBox.Image = imageToDraw;
-            }
-        }
-
-        private Color[,] ResizeImage(Color[,] rawData)
-        {
-            int height = image.Height;
-            int width = image.Width;
-
-            int scale = imageScale;
-
-            int newHeight = height * scale;
-            int newWidht = width * scale;
-            Color[,] newRawData = new Color[newHeight, newWidht];
-
-            int startX = 0; int startY = 0;
-
-            for (int y1 = 0; y1 < height; y1++)
-            {
-                for (int x1 = 0; x1 < width; x1++)
-                {
-                    Color colorToCopy = rawData[y1, x1];
-                    for (int y2 = startY; y2 < (startY + imageScale); y2++)
-                    {
-                        for (int x2 = startX; x2 < (startX + imageScale); x2++)
-                        {
-                            newRawData[y2, x2] = colorToCopy;
-                        }
-                    }
-
-                    startX += imageScale;
-                }
-
-                startX = 0;
-                startY += imageScale;
-            }
-
-            return newRawData;
-        }
-
-        private void RedrawCanvas(Size newSize)
-        {
-            if (newSize.Width > image.Width)
-            {
-                Color[,] newRawData = ScaleUp(newSize);
-                image = new(newRawData);
-                DrawImage(newRawData);
-            }
-            if (newSize.Width < image.Width)
-            {
-                Color[,] newRawData = ScaleDown(newSize);
-                image = new(newRawData);
-                DrawImage(newRawData);
-            }
-        }
-
-        private Color[,] ScaleUp(Size newSize)
-        {
-            Color[,] currentRawData = image.RawData;
-            Color[,] newRawData = new Color[newSize.Height, newSize.Width];
-
-            int currentWidth = image.Width;
-            int currentHeight = image.Height;
-
-            for (int y = 0; y < currentHeight; y++)
-            {
-                for (int x = 0; x < currentWidth; x++)
-                {
-                    newRawData[y, x] = currentRawData[y, x];
-                }
-            }
-
-            for (int y = 0; y < currentHeight; y++)
-            {
-                for (int x = currentWidth; x < newSize.Width; x++)
-                {
-                    newRawData[y, x] = Color.FromArgb(0, 0, 0);
-                }
-            }
-
-            for (int y = currentHeight; y < newSize.Height; y++)
-            {
-                for (int x = 0; x < newSize.Width; x++)
-                {
-                    newRawData[y, x] = Color.FromArgb(0, 0, 0);
-                }
-            }
-
-            return newRawData;
-        }
-
-        private Color[,] ScaleDown(Size newSize)
-        {
-            Color[,] currentRawData = image.RawData;
-            Color[,] newRawData = new Color[newSize.Height, newSize.Width];
-
-            for (int y = 0; y < newSize.Height; y++)
-            {
-                for (int x = 0; x < newSize.Width; x++)
-                {
-                    newRawData[y, x] = currentRawData[y, x];
-                }
-            }
-
-            return newRawData;
-        }
-
         //Metody uživatelského rozhraní
         private void imgSelectBox_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -282,7 +162,7 @@ namespace RasterFramework
             }
 
             imageLoaded = true;
-            DrawImage(image.RawData);
+            renderer.DrawImage(image.RawData, imageBox);
         }
 
         private void btnSave_Click(object sender, EventArgs e)
@@ -304,7 +184,9 @@ namespace RasterFramework
         {
             imageScale = (int)numZoom.Value;
             isScaled = imageScale != 1 ? true : false;
-            DrawImage(ResizeImage(image.RawData));
+
+            Color[,] newRawData = renderer.ResizeImage(image.RawData, imageScale);
+            renderer.DrawImage(newRawData, imageBox);
         }
 
         private void btnNewInstance_Click(object sender, EventArgs e)
@@ -315,26 +197,34 @@ namespace RasterFramework
 
         private void canvasSelectBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            Size newSize = new();
-
-            switch (canvasSelectBox.SelectedIndex)
+            if(!EventsOff)
             {
-                case 0:
-                    newSize = new Size(400, 400);
-                    imageBox.Size = new(400, 400);
-                    imagePanel.Size = new(403, 403);
-                    this.MinimumSize = new(580, 525);
-                    break;
-                case 1:
-                    newSize = new Size(1280, 720);
-                    if (this.Width < 1460 || this.Height < 830) this.Size = new(1460, 845);
-                    this.MinimumSize = new(1460, 845);
-                    imageBox.Size = new(1280, 720);
-                    imagePanel.Size = new(1283, 723);
-                    break;
-            }
+                Size newSize = new();
 
-            if (!imageLoaded) RedrawCanvas(newSize);
+                switch (canvasSelectBox.SelectedIndex)
+                {
+                    case 0:
+                        newSize = new Size(400, 400);
+                        imageBox.Size = new(400, 400);
+                        imagePanel.Size = new(403, 403);
+                        this.MinimumSize = new(580, 525);
+                        break;
+                    case 1:
+                        newSize = new Size(1280, 720);
+                        if (this.Width < 1460 || this.Height < 830) this.Size = new(1460, 845);
+                        this.MinimumSize = new(1460, 845);
+                        imageBox.Size = new(1280, 720);
+                        imagePanel.Size = new(1283, 723);
+                        break;
+                }
+
+                if (!imageLoaded)
+                {
+                    image = new(renderer.RedrawCanvas(image, newSize));
+                    renderer.DrawImage(image.RawData, imageBox);
+                    numZoom.Value = 1; isScaled = false;
+                }
+            }
         }
 
         private void btnAddLIne_Click(object sender, EventArgs e)
@@ -345,13 +235,17 @@ namespace RasterFramework
 
             if (addLine == DialogResult.OK)
             {
-                DrawImage(
-                    algorithmCall.DrawLine(
+                image = new(algorithmCall.DrawLine(
                         image,
                         addLineForm.SelectedAlgorithm,
                         addLineForm.PointA,
-                        addLineForm.PointB)
-                    );
+                        addLineForm.PointB));
+                if (isScaled)
+                {
+                    Color[,] newRawData = renderer.ResizeImage(image.RawData, imageScale);
+                    renderer.DrawImage(newRawData, imageBox);
+                }
+                else renderer.DrawImage(image.RawData, imageBox);
             }
         }
 
@@ -363,12 +257,16 @@ namespace RasterFramework
 
             if (addCurve == DialogResult.OK)
             {
-                DrawImage(
-                    algorithmCall.DrawCurve(
+                image = new(algorithmCall.DrawCurve(
                         image,
                         addCurveForm.SelectedAlgorithm,
-                        addCurveForm.Points.ToArray())
-                    );
+                        addCurveForm.Points.ToArray()));
+                if (isScaled)
+                {
+                    Color[,] newRawData = renderer.ResizeImage(image.RawData, imageScale);
+                    renderer.DrawImage(newRawData, imageBox);
+                }
+                else renderer.DrawImage(image.RawData, imageBox);
             }
         }
 
@@ -379,14 +277,26 @@ namespace RasterFramework
                 fillActive = fillCheckBox.Checked;
                 if (fillActive)
                 {
-                    DrawImage(
-                        algorithmCall.DrawFill(
+                    image = new(algorithmCall.DrawFill(
                             fillCheckBox,
                             filledImage,
-                            SelectedFillAlgorithm)
-                        );
+                            SelectedFillAlgorithm));
+                    if (isScaled)
+                    {
+                        Color[,] newRawData = renderer.ResizeImage(image.RawData, imageScale);
+                        renderer.DrawImage(newRawData, imageBox);
+                    }
+                    else renderer.DrawImage(image.RawData, imageBox);
                 }
-                else DrawImage(image.RawData);
+                else
+                {
+                    if (isScaled)
+                    {
+                        Color[,] newRawData = renderer.ResizeImage(image.RawData, imageScale);
+                        renderer.DrawImage(newRawData, imageBox);
+                    }
+                    else renderer.DrawImage(image.RawData, imageBox);
+                }
             }
             else fillCheckBox.CheckState = CheckState.Unchecked;
         }
@@ -409,11 +319,15 @@ namespace RasterFramework
 
         private void btnApplyFilter_Click(object sender, EventArgs e)
         {
-            DrawImage(
-                algorithmCall.ApplyFilter(
+            image = new(algorithmCall.ApplyFilter(
                     image,
-                    SelectedFilterAlgorithm)
-                );
+                    SelectedFilterAlgorithm));
+            if (isScaled)
+            {
+                Color[,] newRawData = renderer.ResizeImage(image.RawData, imageScale);
+                renderer.DrawImage(newRawData, imageBox);
+            }
+            else renderer.DrawImage(image.RawData, imageBox);
         }
 
         private void filterSelectBox_SelectedIndexChanged(object sender, EventArgs e)
@@ -439,12 +353,16 @@ namespace RasterFramework
 
             if (applyConvolution == DialogResult.OK)
             {
-                DrawImage(
-                    algorithmCall.ApplyConvolution(
+                image = new(algorithmCall.ApplyConvolution(
                         image,
                         applyConvolutionForm.SelectedAlgorithm,
-                        applyConvolutionForm.Kernel)
-                    );
+                        applyConvolutionForm.Kernel));
+                if (isScaled)
+                {
+                    Color[,] newRawData = renderer.ResizeImage(image.RawData, imageScale);
+                    renderer.DrawImage(newRawData, imageBox);
+                }
+                else renderer.DrawImage(image.RawData, imageBox);
             }
         }
     }

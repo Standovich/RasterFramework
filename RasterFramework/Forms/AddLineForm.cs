@@ -16,6 +16,7 @@ namespace RasterFramework.Forms
         private List<string> listOfAlgorithms;
         private IEnumerable<Type> listOfClasses;
         private Size maxSize;
+        private bool EventsOff = false;
 
         public Type SelectedAlgorithm { get; set; }
         public Point PointA { get; set; }
@@ -45,6 +46,8 @@ namespace RasterFramework.Forms
 
         private void AddLineForm_Load(object sender, EventArgs e)
         {
+            EventsOff = true;
+
             foreach (string name in listOfAlgorithms)
             {
                 lineSelectBox.Items.Add(name);
@@ -57,20 +60,25 @@ namespace RasterFramework.Forms
 
             SelectedAlgorithm = listOfClasses.First();
             lineSelectBox.SelectedIndex = 0;
+
+            EventsOff = false;
         }
 
         private void lineSelectBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            foreach (Type type in listOfClasses)
+            if(!EventsOff)
             {
-                object lineClass = Activator.CreateInstance(type);
-                MethodInfo methodInfo = type.GetMethod("GetName");
-                var result = methodInfo.Invoke(lineClass, null);
-
-                if ((string)result == lineSelectBox.SelectedItem.ToString())
+                foreach (Type type in listOfClasses)
                 {
-                    SelectedAlgorithm = type;
-                    break;
+                    object lineClass = Activator.CreateInstance(type);
+                    MethodInfo methodInfo = type.GetMethod("GetName");
+                    var result = methodInfo.Invoke(lineClass, null);
+
+                    if ((string)result == lineSelectBox.SelectedItem.ToString())
+                    {
+                        SelectedAlgorithm = type;
+                        break;
+                    }
                 }
             }
         }
