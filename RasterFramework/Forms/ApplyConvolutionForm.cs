@@ -139,12 +139,19 @@ namespace RasterFramework.Forms
 
         private void kernelGrid_CellValueChanged(object sender, DataGridViewCellEventArgs e)
         {
-            kernelSelectBox.SelectedIndex = kernelSelectBox.Items.Count - 1;
-
             int indexX = e.ColumnIndex;
             int indexY = e.RowIndex;
 
-            Kernel[indexY, indexX] = double.Parse(kernelGrid[indexX, indexY].Value.ToString());
+            string cellValue = kernelGrid[indexX, indexY].Value.ToString();
+            double validNumber = 0;
+
+            if (double.TryParse(cellValue, out validNumber))
+            {
+                kernelSelectBox.SelectedIndex = kernelSelectBox.Items.Count - 1;
+
+                Kernel[indexY, indexX] = validNumber;
+            }
+            else kernelGrid[indexX, indexY].Value = 0;
         }
 
         private void kernelSelectBox_SelectedIndexChanged(object sender, EventArgs e)

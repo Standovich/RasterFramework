@@ -16,8 +16,7 @@ namespace RasterFramework.Lessons.Drawing
             int widht = image.Width;
             int height = image.Height;
 
-            bool start = false;
-            bool end = false;
+            bool fill = false;
             Point p0 = new(); Point p1 = new();
 
             for (int y = 0; y < height; y++)
@@ -26,21 +25,20 @@ namespace RasterFramework.Lessons.Drawing
                 {
                     if (rawData[y, x] != Color.FromArgb(0, 0, 0))
                     {
-                        if (!start)
+                        if (!fill)
                         {
-                            p0 = new(x, y);
-                            start = true;
+                            p0 = new Point(x, y);
+                            fill = true;
                         }
                         else
                         {
-                            p1 = new(x, y);
-                            start = false;
-                            end = true;
+                            p1 = new Point(x, y);
+                            line.Apply(image, p0, p1);
+                            break;
                         }
                     }
                 }
-                if(end) line.Apply(image, p0, p1);
-                start = false; end = false;
+                fill = false;
             }
         }
 

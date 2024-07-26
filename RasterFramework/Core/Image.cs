@@ -24,7 +24,8 @@ namespace RasterFramework.Core
         {
             this.Width = newRawData.GetLength(1);
             this.Height = newRawData.GetLength(0);
-            this.RawData = newRawData;
+            this.RawData = new Color[Height, Width];
+            Array.Copy(newRawData, this.RawData, newRawData.Length);
         }
 
         public static Color[,] GetEmptyData(int width, int height)
